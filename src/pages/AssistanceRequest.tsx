@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HandHeart, User, Phone, Home, FileText, DollarSign, Users, Calendar } from "lucide-react";
+import { HandHeart, User, Phone, FileText, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,15 +49,14 @@ const AssistanceRequest = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Validate form data
       assistanceSchema.parse(formData);
 
-      // Submit to Firebase
       await addDoc(collection(db, "assistanceRequests"), {
         ...formData,
         status: "pending",
@@ -69,7 +68,6 @@ const AssistanceRequest = () => {
         description: "Your assistance request has been received. We will contact you soon.",
       });
 
-      // Reset form
       setFormData({
         fullName: "",
         phone: "",
@@ -119,13 +117,11 @@ const AssistanceRequest = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Personal Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <User className="w-5 h-5" />
                   Personal Information
                 </h3>
-
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Full Name *</Label>
@@ -138,7 +134,6 @@ const AssistanceRequest = () => {
                       required
                     />
                   </div>
-
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number *</Label>
                     <Input
@@ -151,7 +146,6 @@ const AssistanceRequest = () => {
                     />
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="address">Full Address *</Label>
                   <Textarea
@@ -166,13 +160,11 @@ const AssistanceRequest = () => {
                 </div>
               </div>
 
-              {/* Family & Financial Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   Family & Financial Information
                 </h3>
-
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="familyMembers">Number of Family Members *</Label>
@@ -186,7 +178,6 @@ const AssistanceRequest = () => {
                       required
                     />
                   </div>
-
                   <div className="space-y-2">
                     <Label htmlFor="monthlyIncome">Monthly Income (RM) *</Label>
                     <Input
@@ -202,13 +193,12 @@ const AssistanceRequest = () => {
                 </div>
               </div>
 
-              {/* Assistance Details */}
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <FileText className="w-5 h-5" />
                   Assistance Details
                 </h3>
-
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="assistanceType">Type of Assistance Needed *</Label>
@@ -229,7 +219,6 @@ const AssistanceRequest = () => {
                       </SelectContent>
                     </Select>
                   </div>
-
                   <div className="space-y-2">
                     <Label htmlFor="urgencyLevel">Urgency Level *</Label>
                     <Select
@@ -248,7 +237,6 @@ const AssistanceRequest = () => {
                     </Select>
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="requestDetails">Detailed Request Information *</Label>
                   <Textarea
@@ -269,7 +257,7 @@ const AssistanceRequest = () => {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-800">
                   <strong>Note:</strong> All requests will be reviewed by our assistance committee. 
-                  We will contact you within 3-5 business days. Please ensure all information provided is accurate.
+                  We will contact you within 3-5 business days.
                 </p>
               </div>
 

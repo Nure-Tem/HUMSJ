@@ -1,4 +1,4 @@
-import { Building2, Users, BookOpen, Wallet, Heart, Globe, Info, Megaphone, BookMarked } from "lucide-react";
+import { Building2, BookOpen, Wallet, Heart, Globe, Info, Megaphone, BookMarked, UserCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const departments = [
@@ -23,13 +23,7 @@ const departments = [
     icon: Wallet,
     color: "primary",
   },
-  {
-    id: "social-affairs",
-    name: "Social Affairs",
-    description: "Handles social welfare, student support, and community relations",
-    icon: Users,
-    color: "accent",
-  },
+
   {
     id: "society-service",
     name: "Society Service / External Affairs",
@@ -49,6 +43,13 @@ const departments = [
     icon: Info,
     color: "primary",
   },
+  {
+    id: "social-affairs-dept",
+    name: "Social Affairs",
+    description: "Coordinates social welfare programs, community events, and member support services",
+    icon: UserCircle,
+    color: "accent",
+  },
 ];
 
 export default function Structure() {
@@ -61,10 +62,10 @@ export default function Structure() {
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
             <Building2 className="h-8 w-8 text-accent" />
           </div>
-          <h1 className="mb-4 font-heading text-4xl font-bold text-primary-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-4 font-heading text-4xl font-bold heading-yellow md:text-5xl lg:text-6xl animate-slide-up">
             Organizational Structure
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-primary-foreground/90 animate-slide-up delay-100">
+          <p className="mx-auto max-w-2xl text-lg text-pink animate-slide-up delay-100">
             Haramaya University Muslim Students Jema'a
           </p>
         </div>
@@ -105,10 +106,10 @@ export default function Structure() {
                         <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-accent/20 flex items-center justify-center">
                           <Icon className="h-8 w-8 text-accent" />
                         </div>
-                        <CardTitle className="font-heading text-2xl text-primary-foreground lg:text-3xl">
+                        <CardTitle className="font-heading text-2xl heading-yellow lg:text-3xl">
                           {dept.name}
                         </CardTitle>
-                        <p className="text-primary-foreground/80 mt-2">{dept.description}</p>
+                        <p className="text-pink mt-2">{dept.description}</p>
                         <div className="mt-4 inline-block rounded-full bg-accent px-4 py-1 text-sm font-medium text-accent-foreground">
                           External Affairs Sector
                         </div>
@@ -169,7 +170,7 @@ export default function Structure() {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl text-center">
             <div className="gold-line mb-6" />
-            <h2 className="font-heading text-2xl font-bold text-foreground md:text-3xl mb-8">
+            <h2 className="font-heading text-2xl font-bold heading-blue md:text-3xl mb-8">
               Working Together for the Ummah
             </h2>
             <div className="grid gap-4 sm:grid-cols-3">

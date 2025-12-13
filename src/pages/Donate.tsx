@@ -8,19 +8,19 @@ const charityProjects = [
   {
     title: "Orphan Sponsorship",
     description: "Support orphaned children with education, food, and essential needs.",
-    goal: "50 orphans",
+    goal: "100+ orphans",
     icon: Users,
   },
   {
     title: "Quran Education Fund",
     description: "Help us provide Quran education materials and teacher stipends.",
-    goal: "ETB 100,000",
+    goal: "ETB 250,000+",
     icon: BookOpen,
   },
   {
     title: "Eid Gift Program",
     description: "Bring joy to needy families during Eid celebrations.",
-    goal: "100 families",
+    goal: "500+ families",
     icon: Gift,
   },
   {
@@ -36,18 +36,18 @@ const donationMethods = [
     icon: Landmark,
     title: "Bank Transfer",
     details: [
-      "Bank: Commercial Bank of Ethiopia",
+      "Bank: Commercial Bank of Ethiopia (CBE)",
       "Account Name: HUMSJ External Affairs",
-      "Account Number: 1000123456789",
+      "Account Number: 1000614307599",
     ],
   },
   {
     icon: Phone,
     title: "Mobile Banking",
     details: [
-      "CBE Birr: 0912345678",
-      "Telebirr: 0912345678",
-      "M-Pesa: 0912345678",
+      "CBE Birr: 0985736451",
+      "Telebirr: 0985736451",
+      "M-Pesa: 0799129735",
     ],
   },
   {
@@ -55,7 +55,7 @@ const donationMethods = [
     title: "In-Person",
     details: [
       "Visit our office at Haramaya University",
-      "Contact: +251 912 345 678",
+      "Contact: +251 985 736 451",
       "Office Hours: Sun-Thu, 9AM-5PM",
     ],
   },
@@ -75,7 +75,7 @@ export default function Donate() {
             <Heart className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">Support Our Mission</span>
           </div>
-          <h1 className="mb-6 font-heading text-4xl font-bold text-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-6 font-heading text-4xl font-bold heading-blue md:text-5xl lg:text-6xl animate-slide-up">
             Donate & Support
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground animate-slide-up delay-100">
@@ -100,7 +100,7 @@ export default function Donate() {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="mb-4 font-heading text-3xl font-bold heading-blue md:text-4xl">
               Active Charity Projects
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -119,7 +119,7 @@ export default function Donate() {
                   <div className="mb-3 inline-flex w-fit rounded-xl bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <project.icon className="h-6 w-6" />
                   </div>
-                  <CardTitle className="font-heading text-lg">{project.title}</CardTitle>
+                  <CardTitle className="font-heading text-lg heading-blue">{project.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="mb-4 text-sm text-muted-foreground">{project.description}</p>
@@ -138,7 +138,7 @@ export default function Donate() {
       <section className="bg-muted/50 py-16 islamic-pattern lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="mb-4 font-heading text-3xl font-bold heading-blue md:text-4xl">
               How to Donate
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -157,7 +157,7 @@ export default function Donate() {
                   <div className="mx-auto mb-3 inline-flex rounded-xl bg-accent/10 p-4 text-accent">
                     <method.icon className="h-8 w-8" />
                   </div>
-                  <CardTitle className="font-heading text-xl">{method.title}</CardTitle>
+                  <CardTitle className="font-heading text-xl heading-blue">{method.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
@@ -178,7 +178,7 @@ export default function Donate() {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-8 text-center shadow-card lg:p-12">
-            <h2 className="mb-4 font-heading text-2xl font-bold text-foreground md:text-3xl">
+            <h2 className="mb-4 font-heading text-2xl font-bold heading-blue md:text-3xl">
               Need Help with Your Donation?
             </h2>
             <p className="mb-6 text-muted-foreground">
@@ -190,7 +190,7 @@ export default function Donate() {
                 <Link to="/contact">Contact Us</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="https://wa.me/251912345678" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/251985736451" target="_blank" rel="noopener noreferrer">
                   <Phone className="mr-2 h-4 w-4" />
                   WhatsApp
                 </a>
@@ -206,7 +206,7 @@ export default function Donate() {
         <div className="absolute inset-0 islamic-pattern opacity-20" />
         
         <div className="container relative mx-auto px-4 text-center">
-          <h2 className="mb-6 font-heading text-3xl font-bold text-primary-foreground md:text-4xl">
+          <h2 className="mb-6 font-heading text-3xl font-bold heading-yellow md:text-4xl">
             JazakAllahu Khairan
           </h2>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-primary-foreground/80">

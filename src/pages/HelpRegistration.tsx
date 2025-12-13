@@ -137,7 +137,7 @@ const HelpRegistration = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-6">
             <Heart className="w-10 h-10 text-blue-600" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold heading-blue mb-4">
             Help Registration
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -184,7 +184,7 @@ const HelpRegistration = () => {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Personal Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 border-b pb-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2 heading-blue border-b pb-2">
                   <User className="w-5 h-5 text-blue-600" />
                   Personal / Organization Information
                 </h3>
@@ -258,7 +258,7 @@ const HelpRegistration = () => {
 
               {/* Location Information */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 border-b pb-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2 heading-blue border-b pb-2">
                   <MapPin className="w-5 h-5 text-blue-600" />
                   Location
                 </h3>
@@ -295,7 +295,7 @@ const HelpRegistration = () => {
 
               {/* Help Details */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 border-b pb-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2 heading-blue border-b pb-2">
                   <FileText className="w-5 h-5 text-blue-600" />
                   Help Details
                 </h3>
@@ -342,7 +342,7 @@ const HelpRegistration = () => {
 
               {/* Document Upload */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 border-b pb-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2 heading-blue border-b pb-2">
                   <Upload className="w-5 h-5 text-blue-600" />
                   Supporting Document (Optional)
                 </h3>
@@ -407,8 +407,8 @@ const HelpRegistration = () => {
         {/* Footer Note */}
         <p className="text-center text-gray-500 mt-8 text-sm">
           Need immediate assistance? Contact us at{" "}
-          <a href="tel:+251912345678" className="text-blue-600 hover:underline">
-            +251 912 345 678
+          <a href="tel:+251985736451" className="text-blue-600 hover:underline">
+            +251 985 736 451
           </a>{" "}
           or{" "}
           <a href="mailto:help@humsj.org" className="text-blue-600 hover:underline">

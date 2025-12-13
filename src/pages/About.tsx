@@ -56,7 +56,7 @@ export default function About() {
           style={{ backgroundImage: `url(${patternBg})` }}
         />
         <div className="container relative mx-auto px-4 text-center">
-          <h1 className="mb-6 font-heading text-4xl font-bold text-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-6 font-heading text-4xl font-bold heading-blue md:text-5xl lg:text-6xl animate-slide-up">
             About External Affairs
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground animate-slide-up delay-100">
@@ -69,7 +69,7 @@ export default function About() {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
-            <h2 className="mb-6 font-heading text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="mb-6 font-heading text-3xl font-bold heading-blue md:text-4xl">
               Our Story
             </h2>
             <div className="space-y-4 text-muted-foreground">
@@ -91,7 +91,7 @@ export default function About() {
       <section className="bg-muted/50 py-16 islamic-pattern lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="mb-4 font-heading text-3xl font-bold heading-blue md:text-4xl">
               Our Purpose & Values
             </h2>
           </div>
@@ -108,7 +108,7 @@ export default function About() {
                     <item.icon className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="mb-2 font-heading text-xl font-semibold text-foreground">
+                    <h3 className="mb-2 font-heading text-xl font-semibold heading-blue">
                       {item.title}
                     </h3>
                     <p className="text-muted-foreground">
@@ -126,7 +126,7 @@ export default function About() {
       <section className="py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-4xl">
-            <h2 className="mb-8 font-heading text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="mb-8 font-heading text-3xl font-bold heading-blue md:text-4xl">
               Our Goals & Responsibilities
             </h2>
             
@@ -160,7 +160,7 @@ export default function About() {
       <section className="bg-muted/50 py-16 lg:py-24">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
+            <h2 className="mb-4 font-heading text-3xl font-bold heading-blue md:text-4xl">
               Our Leadership Team
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -182,7 +182,7 @@ export default function About() {
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
-                <h3 className="mb-1 font-heading text-lg font-semibold text-foreground">
+                <h3 className="mb-1 font-heading text-lg font-semibold heading-blue">
                   {member.name}
                 </h3>
                 <p className="text-sm text-muted-foreground">{member.role}</p>

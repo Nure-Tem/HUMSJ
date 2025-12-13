@@ -11,10 +11,10 @@ export default function VisionMission() {
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
             <Star className="h-8 w-8 text-accent" />
           </div>
-          <h1 className="mb-4 font-heading text-4xl font-bold text-primary-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-4 font-heading text-4xl font-bold heading-yellow md:text-5xl lg:text-6xl animate-slide-up">
             Vision, Mission & Goal
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-primary-foreground/90 animate-slide-up delay-100">
+          <p className="mx-auto max-w-2xl text-lg text-pink animate-slide-up delay-100">
             Haramaya University Muslim Students Jema'a
           </p>
         </div>
@@ -156,7 +156,7 @@ export default function VisionMission() {
       <section className="py-16 gradient-navy islamic-pattern-gold">
         <div className="container mx-auto px-4 text-center">
           <blockquote className="mx-auto max-w-3xl">
-            <p className="font-heading text-2xl italic text-primary-foreground/90 md:text-3xl lg:text-4xl">
+            <p className="font-heading text-2xl italic heading-yellow md:text-3xl lg:text-4xl">
               "The best of people are those who are most beneficial to others"
             </p>
             <footer className="mt-6 text-accent">

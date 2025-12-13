@@ -58,6 +58,11 @@
     --green-light: 158 40% 45%;
     --cream: 38 30% 85%;
     
+    /* Purple colors for headings */
+    --blue-heading: 270 70% 60%;
+    --blue-heading-light: 270 80% 70%;
+    --blue-heading-dark: 270 60% 50%;
+    
     /* Gradients */
     --gradient-dark: linear-gradient(180deg, hsl(20 14% 4%), hsl(20 12% 8%));
     --gradient-gold: linear-gradient(135deg, hsl(38 92% 50%), hsl(38 85% 60%));
@@ -100,6 +105,15 @@
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
+  }
+  
+  /* Blue headings for titles */
+  .text-heading-blue {
+    color: hsl(var(--blue-heading));
+  }
+  
+  .text-heading-blue-light {
+    color: hsl(var(--blue-heading-light));
   }
 }
 
@@ -185,6 +199,36 @@
   .text-gradient-light {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(38 92% 55%), hsl(38 85% 70%));
+  }
+  
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(270 70% 60%), hsl(270 80% 70%));
+  }
+  
+  /* Purple heading styles */
+  .heading-blue {
+    color: hsl(270 70% 60%);
+  }
+  
+  .heading-blue-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(270 70% 60%), hsl(270 80% 70%));
+  }
+  
+  /* Magenta heading styles */
+  .heading-yellow {
+    color: hsl(300 100% 50%);
+  }
+  
+  .heading-yellow-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(300 100% 50%), hsl(320 100% 60%));
+  }
+  
+  /* Pink text styles */
+  .text-pink {
+    color: hsl(330 100% 70%);
   }
 
   /* Gold accent line */

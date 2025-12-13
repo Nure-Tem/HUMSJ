@@ -25,7 +25,7 @@ const features = [
 
 const stats = [
   { value: "500+", label: "Students Taught" },
-  { value: "100+", label: "Families Supported" },
+  { value: "200+", label: "Families Supported" },
   { value: "50+", label: "Charity Projects" },
   { value: "10+", label: "Years of Service" },
 ];
@@ -132,7 +132,7 @@ export default function Index() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="gold-line mb-6" />
             <h2 className="mb-6 font-heading text-3xl font-bold md:text-4xl animate-slide-up">
-              <span className="text-gradient">Our Mission</span>
+              <span className="text-gradient-blue">Our Mission</span>
             </h2>
             <p className="text-lg text-muted-foreground animate-slide-up delay-100 leading-relaxed">
               The External Affairs Sector of HUMSJ is dedicated to extending our Islamic values and services beyond the university walls. We work tirelessly to educate, support, and uplift both our student community and the broader society through various programs rooted in the teachings of Islam.
@@ -147,7 +147,7 @@ export default function Index() {
           <div className="mb-12 text-center">
             <div className="gold-line mb-6" />
             <h2 className="mb-4 font-heading text-3xl font-bold md:text-4xl">
-              <span className="text-gradient">What We Do</span>
+              <span className="text-gradient-blue">What We Do</span>
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
               Our three main pillars of service to the community
@@ -165,7 +165,7 @@ export default function Index() {
                   <div className="mx-auto mb-6 inline-flex rounded-xl bg-primary/20 p-4 transition-all duration-300 group-hover:bg-primary group-hover:shadow-gold">
                     <feature.icon className="h-8 w-8 text-primary group-hover:text-primary-foreground" />
                   </div>
-                  <h3 className="mb-3 font-heading text-xl font-semibold text-foreground">
+                  <h3 className="mb-3 font-heading text-xl font-semibold heading-blue">
                     {feature.title}
                   </h3>
                   <p className="text-muted-foreground">
@@ -213,7 +213,7 @@ export default function Index() {
         <div className="container relative mx-auto px-4 text-center">
           <div className="gold-line mb-6" />
           <h2 className="mb-6 font-heading text-3xl font-bold md:text-4xl">
-            <span className="text-gradient">Join Us in Making a Difference</span>
+            <span className="text-gradient-blue">Join Us in Making a Difference</span>
           </h2>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
             Your support helps us continue our mission of serving the community. Every contribution, big or small, makes a meaningful impact.

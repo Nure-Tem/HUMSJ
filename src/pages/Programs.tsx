@@ -106,10 +106,10 @@ export default function Programs() {
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
             <BookOpen className="h-8 w-8 text-accent" />
           </div>
-          <h1 className="mb-4 font-heading text-4xl font-bold text-primary-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-4 font-heading text-4xl font-bold heading-yellow md:text-5xl lg:text-6xl animate-slide-up">
             Our Programs & Activities
           </h1>
-          <p className="mx-auto max-w-2xl text-lg text-primary-foreground/90 animate-slide-up delay-100">
+          <p className="mx-auto max-w-2xl text-lg text-pink animate-slide-up delay-100">
             Discover the various ways we serve the community through education, support, and charitable initiatives.
           </p>
         </div>
@@ -120,7 +120,7 @@ export default function Programs() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="gold-line mb-6" />
-            <h2 className="font-heading text-3xl font-bold text-foreground md:text-4xl mb-4">
+            <h2 className="font-heading text-3xl font-bold heading-blue md:text-4xl mb-4">
               External Affairs Programs
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -213,7 +213,7 @@ export default function Programs() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="gold-line mb-6" />
-            <h2 className="font-heading text-3xl font-bold text-foreground md:text-4xl mb-4">
+            <h2 className="font-heading text-3xl font-bold heading-blue md:text-4xl mb-4">
               All Programs
             </h2>
           </div>
@@ -272,10 +272,10 @@ export default function Programs() {
       <section className="gradient-navy py-16 lg:py-24 islamic-pattern-gold">
         <div className="container mx-auto px-4 text-center">
           <div className="gold-line mb-6" />
-          <h2 className="mb-4 font-heading text-3xl font-bold text-primary-foreground md:text-4xl">
+          <h2 className="mb-4 font-heading text-3xl font-bold heading-yellow md:text-4xl">
             Ready to Get Involved?
           </h2>
-          <p className="mx-auto mb-8 max-w-2xl text-primary-foreground/80">
+          <p className="mx-auto mb-8 max-w-2xl text-pink">
             Whether you want to participate in our programs or support our work, we welcome you to join our community.
           </p>
           <div className="flex flex-wrap justify-center gap-4">

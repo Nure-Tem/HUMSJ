@@ -4,6 +4,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import news1 from "@/assets/news-1.jpg";
+import news2 from "@/assets/news-2.jpg";
+import news3 from "@/assets/news-3.jpg";
+import news4 from "@/assets/news-4.jpg";
+import news5 from "@/assets/news-5.jpg";
+import news6 from "@/assets/news-6.jpg";
+import news7 from "@/assets/news-7.jpg";
+import news8 from "@/assets/news-8.jpg";
+import news9 from "@/assets/news-9.jpg";
 
 interface NewsItem {
   id: string;
@@ -28,24 +37,6 @@ const sampleNews: NewsItem[] = [
   },
   {
     id: "2",
-    title: "Ramadan Food Distribution Program",
-    excerpt: "Alhamdulillah, we successfully distributed Iftar packages to 200 families in the local community.",
-    content: "During the blessed month of Ramadan, our charity sub-sector organized a comprehensive food distribution...",
-    date: "2024-11-15",
-    category: "Charity",
-    image: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600&h=400&fit=crop",
-  },
-  {
-    id: "3",
-    title: "New Islamic Education Series Launched",
-    excerpt: "Weekly lectures on Islamic jurisprudence now available every Thursday after Maghrib prayer.",
-    content: "We are excited to announce the launch of our new Islamic Education Series focusing on practical Fiqh...",
-    date: "2024-11-01",
-    category: "Education",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop",
-  },
-  {
-    id: "4",
     title: "Orphan Sponsorship Milestone",
     excerpt: "We have now successfully sponsored 50 orphans through our dedicated support program.",
     content: "Through the generosity of our donors, we have reached an important milestone in our orphan sponsorship...",
@@ -54,7 +45,7 @@ const sampleNews: NewsItem[] = [
     image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=400&fit=crop",
   },
   {
-    id: "5",
+    id: "3",
     title: "Community Outreach Day Success",
     excerpt: "Over 100 volunteers participated in our community service event, benefiting local neighborhoods.",
     content: "Our quarterly community outreach day was a tremendous success with record volunteer participation...",
@@ -63,13 +54,94 @@ const sampleNews: NewsItem[] = [
     image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=400&fit=crop",
   },
   {
-    id: "6",
+    id: "4",
     title: "New Partnership Announcement",
     excerpt: "HUMSJ External Affairs partners with local Islamic organizations for greater community impact.",
     content: "We are pleased to announce a new strategic partnership that will expand our reach and impact...",
     date: "2024-09-25",
     category: "News",
     image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop",
+  },
+  {
+    id: "7",
+    title: "Quran Education Program for Children",
+    excerpt: "Our weekly Quran teaching sessions continue to benefit children in the local community with Islamic education.",
+    content: "Our Quran education program brings together children from the community for weekly learning sessions...",
+    date: "2024-12-10",
+    category: "Education",
+    image: news1,
+  },
+  {
+    id: "8",
+    title: "Food Aid Distribution Campaign",
+    excerpt: "Alhamdulillah, we distributed food packages including oil and essential supplies to families in need.",
+    content: "Our charity team successfully organized a food distribution campaign reaching dozens of families...",
+    date: "2024-12-05",
+    category: "Charity",
+    image: news2,
+  },
+  {
+    id: "9",
+    title: "Clothing Distribution for Needy Families",
+    excerpt: "New clothes were collected and prepared for distribution to underprivileged families and children.",
+    content: "Through generous donations, we gathered clothing items to support families in need...",
+    date: "2024-11-28",
+    category: "Charity",
+    image: news3,
+  },
+  {
+    id: "10",
+    title: "HUMSJ Charity Team Community Visit",
+    excerpt: "Our dedicated volunteers visited rural communities to assess needs and provide direct support.",
+    content: "The HUMSJ External Affairs team conducted a community outreach visit to understand local needs...",
+    date: "2024-11-20",
+    category: "Community",
+    image: news4,
+  },
+  {
+    id: "11",
+    title: "Sadaqah Distribution Event",
+    excerpt: "Elder community members received support through our ongoing Sadaqah distribution program.",
+    content: "Our Sadaqah program continues to support elderly and vulnerable members of the community...",
+    date: "2024-11-18",
+    category: "Charity",
+    image: news5,
+  },
+  {
+    id: "12",
+    title: "Eid Clothing Gift Program for Children",
+    excerpt: "Children received new clothes as part of our Eid gift program, bringing joy to many families.",
+    content: "The Eid gift program successfully distributed clothing to children in the community...",
+    date: "2024-11-12",
+    category: "Events",
+    image: news6,
+  },
+  {
+    id: "13",
+    title: "NESR Charity Partnership Meeting",
+    excerpt: "HUMSJ External Affairs team met with NESR Charity partners to coordinate community support efforts.",
+    content: "Strategic partnership discussions were held to expand our charitable reach and impact...",
+    date: "2024-11-08",
+    category: "News",
+    image: news7,
+  },
+  {
+    id: "14",
+    title: "Community Support Initiative",
+    excerpt: "Our volunteers continue to reach out and support families in need across the local community.",
+    content: "The HUMSJ External Affairs team organized another successful community support initiative...",
+    date: "2024-11-03",
+    category: "Community",
+    image: news8,
+  },
+  {
+    id: "15",
+    title: "Charity Distribution Program",
+    excerpt: "Essential items and supplies were distributed to underprivileged families as part of our ongoing charity work.",
+    content: "Our charity sub-sector successfully completed another distribution program...",
+    date: "2024-10-28",
+    category: "Charity",
+    image: news9,
   },
 ];
 
@@ -123,7 +195,7 @@ export default function News() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-muted/50 py-20 islamic-pattern lg:py-32">
         <div className="container relative mx-auto px-4 text-center">
-          <h1 className="mb-6 font-heading text-4xl font-bold text-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-6 font-heading text-4xl font-bold heading-blue md:text-5xl lg:text-6xl animate-slide-up">
             News & Updates
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground animate-slide-up delay-100">
@@ -220,7 +292,7 @@ export default function News() {
       <section className="bg-muted/50 py-16 lg:py-24">
         <div className="container mx-auto px-4 text-center">
           <Clock className="mx-auto mb-4 h-12 w-12 text-primary" />
-          <h2 className="mb-4 font-heading text-2xl font-bold text-foreground md:text-3xl">
+          <h2 className="mb-4 font-heading text-2xl font-bold heading-blue md:text-3xl">
             Stay Updated
           </h2>
           <p className="mx-auto mb-6 max-w-xl text-muted-foreground">
@@ -228,13 +300,18 @@ export default function News() {
           </p>
           <div className="flex justify-center gap-4">
             <Button variant="outline" asChild>
-              <a href="#" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.facebook.com/HaramayaUniversityMuslimStudentsJemaa" target="_blank" rel="noopener noreferrer">
                 Follow on Facebook
               </a>
             </Button>
             <Button variant="outline" asChild>
               <a href="#" target="_blank" rel="noopener noreferrer">
                 Follow on Instagram
+              </a>
+            </Button>
+            <Button variant="outline" asChild>
+              <a href="https://t.me/humsjofficialchannel" target="_blank" rel="noopener noreferrer">
+                Join Telegram
               </a>
             </Button>
           </div>

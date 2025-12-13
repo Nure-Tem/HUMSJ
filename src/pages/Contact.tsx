@@ -30,7 +30,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+251 912 345 678", "+251 923 456 789"],
+    details: ["+251 985 736 451"],
   },
   {
     icon: Clock,
@@ -107,7 +107,7 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-muted/50 py-20 islamic-pattern lg:py-32">
         <div className="container relative mx-auto px-4 text-center">
-          <h1 className="mb-6 font-heading text-4xl font-bold text-foreground md:text-5xl lg:text-6xl animate-slide-up">
+          <h1 className="mb-6 font-heading text-4xl font-bold heading-blue md:text-5xl lg:text-6xl animate-slide-up">
             Contact Us
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground animate-slide-up delay-100">
@@ -130,7 +130,7 @@ export default function Contact() {
                   <div className="mx-auto mb-4 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
                     <info.icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mb-2 font-heading text-lg font-semibold text-foreground">
+                  <h3 className="mb-2 font-heading text-lg font-semibold heading-blue">
                     {info.title}
                   </h3>
                   {info.details.map((detail, i) => (
@@ -148,7 +148,7 @@ export default function Contact() {
             <Card className="border-border/50 shadow-card">
               <CardContent className="p-6 lg:p-8">
                 <div className="mb-6 text-center">
-                  <h2 className="mb-2 font-heading text-2xl font-bold text-foreground">
+                  <h2 className="mb-2 font-heading text-2xl font-bold heading-blue">
                     Send Us a Message
                   </h2>
                   <p className="text-muted-foreground">
@@ -233,14 +233,14 @@ export default function Contact() {
       <section className="bg-muted/50 py-16 lg:py-24">
         <div className="container mx-auto px-4 text-center">
           <MessageCircle className="mx-auto mb-4 h-12 w-12 text-primary" />
-          <h2 className="mb-4 font-heading text-2xl font-bold text-foreground md:text-3xl">
+          <h2 className="mb-4 font-heading text-2xl font-bold heading-blue md:text-3xl">
             Prefer WhatsApp?
           </h2>
           <p className="mx-auto mb-6 max-w-xl text-muted-foreground">
             For quick inquiries, you can reach us directly on WhatsApp.
           </p>
           <Button size="lg" variant="gold" asChild>
-            <a href="https://wa.me/251912345678" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/251985736451" target="_blank" rel="noopener noreferrer">
               <MessageCircle className="mr-2 h-4 w-4" />
               Chat on WhatsApp
             </a>

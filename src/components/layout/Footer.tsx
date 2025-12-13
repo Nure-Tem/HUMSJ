@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Send } from "lucide-react";
 import logo from "@/assets/humsj-logo.jpg";
 
 export function Footer() {
@@ -81,17 +81,20 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-primary" />
-                <a href="tel:+251912345678" className="text-sm text-muted-foreground hover:text-primary">
-                  +251 912 345 678
+                <a href="tel:+251985736451" className="text-sm text-muted-foreground hover:text-primary">
+                  +251 985 736 451
                 </a>
               </li>
             </ul>
             <div className="mt-4 flex gap-3">
-              <a href="#" className="rounded-lg bg-primary/20 p-2 text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-gold">
+              <a href="https://www.facebook.com/HaramayaUniversityMuslimStudentsJemaa" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-primary/20 p-2 text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-gold">
                 <Facebook className="h-4 w-4" />
               </a>
               <a href="#" className="rounded-lg bg-primary/20 p-2 text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-gold">
                 <Instagram className="h-4 w-4" />
+              </a>
+              <a href="https://t.me/humsjofficialchannel" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-primary/20 p-2 text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-gold">
+                <Send className="h-4 w-4" />
               </a>
               <a href="#" className="rounded-lg bg-primary/20 p-2 text-primary transition-all hover:bg-primary hover:text-primary-foreground hover:shadow-gold">
                 <Youtube className="h-4 w-4" />
