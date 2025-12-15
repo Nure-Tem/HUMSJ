@@ -92,9 +92,9 @@ export default function CharityDistribution() {
     setIsSubmitting(true);
 
     try {
-      await addDoc(collection(db, "charity_distributions"), {
+      await addDoc(collection(db, "charityDistributions"), {
         ...formData,
-        createdAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
 
       toast({

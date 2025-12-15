@@ -62,9 +62,9 @@ export default function MonthlyCharityRegistration() {
     setIsSubmitting(true);
 
     try {
-      await addDoc(collection(db, "monthly_charity_registrations"), {
+      await addDoc(collection(db, "monthlyCharityRegistrations"), {
         ...formData,
-        createdAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
 
       setIsSuccess(true);

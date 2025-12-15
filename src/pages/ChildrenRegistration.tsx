@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -69,9 +69,9 @@ export default function ChildrenRegistration() {
     setIsSubmitting(true);
 
     try {
-      await addDoc(collection(db, "children_registrations"), {
+      await addDoc(collection(db, "childrenRegistrations"), {
         ...formData,
-        createdAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
 
       setIsSuccess(true);
@@ -247,25 +247,27 @@ export default function ChildrenRegistration() {
                       const Icon = program.icon;
                       const isSelected = formData.programs.includes(program.id);
                       return (
-                        <div
+                        <label
                           key={program.id}
-                          onClick={() => handleProgramToggle(program.id)}
+                          htmlFor={`program-${program.id}`}
                           className={`flex cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-300 ${
                             isSelected
                               ? "border-primary bg-primary/10 shadow-gold"
                               : "border-primary/20 hover:border-primary/40 hover:bg-primary/5"
                           }`}
                         >
-                          <Checkbox
+                          <input
+                            type="checkbox"
+                            id={`program-${program.id}`}
                             checked={isSelected}
-                            onCheckedChange={() => handleProgramToggle(program.id)}
-                            className="pointer-events-none border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                            onChange={() => handleProgramToggle(program.id)}
+                            className="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
                           />
                           <Icon className={`h-5 w-5 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
                           <span className={`text-sm font-medium ${isSelected ? "text-primary" : "text-foreground"}`}>
                             {program.label}
                           </span>
-                        </div>
+                        </label>
                       );
                     })}
                   </div>
