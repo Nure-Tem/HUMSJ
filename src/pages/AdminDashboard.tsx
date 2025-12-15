@@ -190,29 +190,23 @@ const AdminDashboard = () => {
     </Card>
   );
 
-  const DetailModal = ({ item, onClose }: { item: Submission; onClose: () => void }) => {
-    console.log("DetailModal item:", item);
-    console.log("Document URL:", item.documentUrl);
-    
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <CardHeader>
-            <CardTitle className="heading-blue">Submission Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {/* Show document image if available */}
-            {item.documentUrl ? (
-              <div className="mb-4">
-                <p className="font-semibold mb-2">Uploaded Document:</p>
-                <img 
-                  src={item.documentUrl} 
-                  alt="Uploaded document" 
-                  className="max-w-full h-auto rounded-lg border shadow-sm"
-                  onError={(e) => console.error("Image load error:", e)}
-                />
-                <a 
-                  href={item.documentUrl} 
+  const DetailModal = ({ item, onClose }: { item: Submission; onClose: () => void }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <CardHeader>
+          <CardTitle className="heading-blue">Submission Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {item.documentUrl && (
+            <div className="mb-4">
+              <p className="font-semibold mb-2">Uploaded Document:</p>
+              <img 
+                src={item.documentUrl} 
+                alt="Uploaded document" 
+                className="max-w-full h-auto rounded-lg border shadow-sm"
+              />
+              <a 
+                href={item.documentUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline text-sm mt-2 inline-block"
@@ -241,7 +235,6 @@ const AdminDashboard = () => {
       </Card>
     </div>
   );
-};
 
   if (isLoading) {
     return (
