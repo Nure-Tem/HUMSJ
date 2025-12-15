@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Users, FileText, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift } from "lucide-react";
+import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,6 +22,7 @@ const AdminDashboard = () => {
   const [childrenRegistrations, setChildrenRegistrations] = useState<Submission[]>([]);
   const [monthlyCharity, setMonthlyCharity] = useState<Submission[]>([]);
   const [charityDistribution, setCharityDistribution] = useState<Submission[]>([]);
+  const [contactMessages, setContactMessages] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<Submission | null>(null);
 
@@ -70,15 +71,25 @@ const AdminDashboard = () => {
         ...doc.data()
       }));
 
+      // Fetch contact messages
+      const contactSnapshot = await getDocs(collection(db, "contacts"));
+      const contactData = contactSnapshot.docs.map(doc => ({
+        id: doc.id,
+        type: "contact",
+        ...doc.data()
+      }));
+
       console.log("Help registrations:", helpData.length);
       console.log("Children registrations:", childrenData.length);
       console.log("Monthly charity:", monthlyData.length);
       console.log("Charity distributions:", distributionData.length);
+      console.log("Contact messages:", contactData.length);
 
       setHelpRequests(helpData);
       setChildrenRegistrations(childrenData);
       setMonthlyCharity(monthlyData);
       setCharityDistribution(distributionData);
+      setContactMessages(contactData);
     } catch (error: any) {
       console.error("Error fetching submissions:", error);
       toast({
@@ -231,7 +242,7 @@ const AdminDashboard = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Help Requests</CardTitle>
@@ -268,14 +279,24 @@ const AdminDashboard = () => {
               <div className="text-2xl font-bold">{charityDistribution.length}</div>
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Messages</CardTitle>
+              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{contactMessages.length}</div>
+            </CardContent>
+          </Card>
         </div>
 
         <Tabs defaultValue="help" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="help">Help Requests</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="help">Help</TabsTrigger>
             <TabsTrigger value="children">Children</TabsTrigger>
-            <TabsTrigger value="monthly">Monthly Charity</TabsTrigger>
-            <TabsTrigger value="distribution">Distributions</TabsTrigger>
+            <TabsTrigger value="monthly">Monthly</TabsTrigger>
+            <TabsTrigger value="distribution">Distribution</TabsTrigger>
+            <TabsTrigger value="messages">Messages</TabsTrigger>
           </TabsList>
           <TabsContent value="help" className="mt-6">
             {helpRequests.length === 0 ? (
@@ -310,6 +331,15 @@ const AdminDashboard = () => {
             ) : (
               charityDistribution.map(item => (
                 <SubmissionCard key={item.id} item={item} collectionName="charityDistributions" />
+              ))
+            )}
+          </TabsContent>
+          <TabsContent value="messages" className="mt-6">
+            {contactMessages.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No contact messages yet</p>
+            ) : (
+              contactMessages.map(item => (
+                <SubmissionCard key={item.id} item={item} collectionName="contacts" />
               ))
             )}
           </TabsContent>
