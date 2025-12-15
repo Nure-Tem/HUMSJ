@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, query, orderBy, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { LogOut, Users, FileText, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,8 +39,7 @@ const AdminDashboard = () => {
   const fetchSubmissions = async () => {
     try {
       // Fetch help registrations
-      const helpQuery = query(collection(db, "helpRegistrations"), orderBy("timestamp", "desc"));
-      const helpSnapshot = await getDocs(helpQuery);
+      const helpSnapshot = await getDocs(collection(db, "helpRegistrations"));
       const helpData = helpSnapshot.docs.map(doc => ({
         id: doc.id,
         type: "help",
@@ -48,8 +47,7 @@ const AdminDashboard = () => {
       }));
 
       // Fetch children registrations
-      const childrenQuery = query(collection(db, "childrenRegistrations"), orderBy("timestamp", "desc"));
-      const childrenSnapshot = await getDocs(childrenQuery);
+      const childrenSnapshot = await getDocs(collection(db, "childrenRegistrations"));
       const childrenData = childrenSnapshot.docs.map(doc => ({
         id: doc.id,
         type: "children",
@@ -57,8 +55,7 @@ const AdminDashboard = () => {
       }));
 
       // Fetch monthly charity registrations
-      const monthlyQuery = query(collection(db, "monthlyCharityRegistrations"), orderBy("timestamp", "desc"));
-      const monthlySnapshot = await getDocs(monthlyQuery);
+      const monthlySnapshot = await getDocs(collection(db, "monthlyCharityRegistrations"));
       const monthlyData = monthlySnapshot.docs.map(doc => ({
         id: doc.id,
         type: "monthly",
@@ -66,8 +63,7 @@ const AdminDashboard = () => {
       }));
 
       // Fetch charity distribution
-      const distributionQuery = query(collection(db, "charityDistributions"), orderBy("timestamp", "desc"));
-      const distributionSnapshot = await getDocs(distributionQuery);
+      const distributionSnapshot = await getDocs(collection(db, "charityDistributions"));
       const distributionData = distributionSnapshot.docs.map(doc => ({
         id: doc.id,
         type: "distribution",
