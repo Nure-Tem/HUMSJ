@@ -18,73 +18,75 @@
     --popover: 20 12% 8%;
     --popover-foreground: 38 25% 90%;
     
-    /* Primary - Golden Amber */
-    --primary: 38 92% 50%;
-    --primary-foreground: 20 14% 4%;
+    /* Primary - HUMSJ Green */
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
     
     /* Secondary - Dark surface */
     --secondary: 20 10% 12%;
-    --secondary-foreground: 38 25% 85%;
+    --secondary-foreground: 142 25% 85%;
     
     /* Muted */
     --muted: 20 10% 15%;
-    --muted-foreground: 38 15% 55%;
+    --muted-foreground: 142 15% 55%;
     
-    /* Accent - Gold */
-    --accent: 38 92% 50%;
+    /* Accent - HUMSJ Gold */
+    --accent: 45 93% 58%;
     --accent-foreground: 20 14% 4%;
     
     /* Navy */
     --navy: 220 30% 12%;
-    --navy-foreground: 38 25% 90%;
+    --navy-foreground: 142 25% 90%;
     
     /* Destructive */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     
     /* Border & Input */
-    --border: 38 30% 20%;
+    --border: 142 30% 20%;
     --input: 20 10% 15%;
-    --ring: 38 92% 50%;
+    --ring: 142 76% 36%;
     
     /* Radius */
     --radius: 0.75rem;
     
-    /* Custom colors */
-    --gold: 38 92% 50%;
-    --gold-light: 38 85% 65%;
-    --gold-dark: 38 95% 40%;
-    --green-dark: 158 64% 18%;
-    --green-light: 158 40% 45%;
-    --cream: 38 30% 85%;
+    /* HUMSJ Colors */
+    --gold: 45 93% 58%;
+    --gold-light: 45 85% 70%;
+    --gold-dark: 45 95% 45%;
+    --green-dark: 142 76% 25%;
+    --green-light: 142 60% 50%;
+    --cream: 45 30% 85%;
     
-    /* Purple colors for headings */
-    --blue-heading: 270 70% 60%;
-    --blue-heading-light: 270 80% 70%;
-    --blue-heading-dark: 270 60% 50%;
+    /* HUMSJ Green colors for headings */
+    --blue-heading: 142 76% 36%;
+    --blue-heading-light: 142 70% 45%;
+    --blue-heading-dark: 142 80% 30%;
     
     /* Gradients */
     --gradient-dark: linear-gradient(180deg, hsl(20 14% 4%), hsl(20 12% 8%));
-    --gradient-gold: linear-gradient(135deg, hsl(38 92% 50%), hsl(38 85% 60%));
-    --gradient-gold-subtle: linear-gradient(135deg, hsl(38 92% 50% / 0.15), hsl(38 85% 60% / 0.05));
+    --gradient-gold: linear-gradient(135deg, hsl(45 93% 58%), hsl(45 85% 70%));
+    --gradient-green: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 70% 45%));
+    --gradient-gold-subtle: linear-gradient(135deg, hsl(45 93% 58% / 0.15), hsl(45 85% 70% / 0.05));
     --gradient-hero: linear-gradient(135deg, hsl(20 14% 6%), hsl(20 12% 10%));
     --gradient-card: linear-gradient(145deg, hsl(20 12% 10%), hsl(20 12% 8%));
     
     /* Shadows */
-    --shadow-glow: 0 0 40px hsl(38 92% 50% / 0.15);
-    --shadow-gold: 0 4px 30px hsl(38 92% 50% / 0.2);
+    --shadow-glow: 0 0 40px hsl(142 76% 36% / 0.15);
+    --shadow-gold: 0 4px 30px hsl(45 93% 58% / 0.2);
+    --shadow-green: 0 4px 30px hsl(142 76% 36% / 0.2);
     --shadow-card: 0 10px 40px -10px hsl(0 0% 0% / 0.5);
     --shadow-elegant: 0 20px 60px -15px hsl(0 0% 0% / 0.4);
     
     /* Sidebar */
     --sidebar-background: 20 12% 6%;
-    --sidebar-foreground: 38 25% 90%;
-    --sidebar-primary: 38 92% 50%;
-    --sidebar-primary-foreground: 20 14% 4%;
+    --sidebar-foreground: 142 25% 90%;
+    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 20 10% 12%;
-    --sidebar-accent-foreground: 38 25% 85%;
-    --sidebar-border: 38 30% 18%;
-    --sidebar-ring: 38 92% 50%;
+    --sidebar-accent-foreground: 142 25% 85%;
+    --sidebar-border: 142 30% 18%;
+    --sidebar-ring: 142 76% 36%;
   }
 }
 
@@ -107,7 +109,7 @@
     @apply font-heading;
   }
   
-  /* Blue headings for titles */
+  /* HUMSJ Green headings for titles */
   .text-heading-blue {
     color: hsl(var(--blue-heading));
   }
@@ -118,17 +120,17 @@
 }
 
 @layer components {
-  /* Islamic geometric pattern - Gold on dark */
+  /* Islamic geometric pattern - HUMSJ Green on dark */
   .islamic-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a528' fill-opacity='0.03'%3E%3Cpath d='M40 0l40 40-40 40L0 40 40 0zm0 10L10 40l30 30 30-30-30-30z'/%3E%3Cpath d='M40 20l20 20-20 20-20-20 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2334a853' fill-opacity='0.03'%3E%3Cpath d='M40 0l40 40-40 40L0 40 40 0zm0 10L10 40l30 30 30-30-30-30z'/%3E%3Cpath d='M40 20l20 20-20 20-20-20 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .islamic-pattern-gold {
-    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a528' fill-opacity='0.08'%3E%3Cpath d='M40 0l40 40-40 40L0 40 40 0zm0 10L10 40l30 30 30-30-30-30z'/%3E%3Cpath d='M40 20l20 20-20 20-20-20 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f1c40f' fill-opacity='0.08'%3E%3Cpath d='M40 0l40 40-40 40L0 40 40 0zm0 10L10 40l30 30 30-30-30-30z'/%3E%3Cpath d='M40 20l20 20-20 20-20-20 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .islamic-border {
-    border: 1px solid hsl(38 92% 50% / 0.3);
+    border: 1px solid hsl(142 76% 36% / 0.3);
   }
   
   .ornamental-frame {
@@ -139,7 +141,7 @@
   .ornamental-frame::before {
     content: '';
     @apply absolute -inset-[1px] rounded-xl pointer-events-none;
-    background: linear-gradient(135deg, hsl(38 92% 50% / 0.2), transparent, hsl(38 92% 50% / 0.1));
+    background: linear-gradient(135deg, hsl(142 76% 36% / 0.2), transparent, hsl(142 76% 36% / 0.1));
   }
 
   .ornamental-frame::after {
@@ -147,16 +149,16 @@
     @apply absolute top-3 left-3 right-3 bottom-3 border border-primary/10 rounded-lg pointer-events-none;
   }
 
-  /* Dark card with gold accent */
+  /* Dark card with green accent */
   .dark-card {
     @apply relative rounded-xl overflow-hidden;
     background: linear-gradient(145deg, hsl(20 12% 10%), hsl(20 12% 8%));
-    border: 1px solid hsl(38 92% 50% / 0.15);
+    border: 1px solid hsl(142 76% 36% / 0.15);
   }
 
   .dark-card:hover {
-    border-color: hsl(38 92% 50% / 0.3);
-    box-shadow: 0 0 30px hsl(38 92% 50% / 0.1);
+    border-color: hsl(142 76% 36% / 0.3);
+    box-shadow: 0 0 30px hsl(142 76% 36% / 0.1);
   }
   
   .gradient-dark {
@@ -171,6 +173,10 @@
     background: var(--gradient-gold);
   }
 
+  .gradient-green {
+    background: var(--gradient-green);
+  }
+
   .gradient-card {
     background: var(--gradient-card);
   }
@@ -181,6 +187,10 @@
 
   .shadow-gold {
     box-shadow: var(--shadow-gold);
+  }
+
+  .shadow-green {
+    box-shadow: var(--shadow-green);
   }
   
   .shadow-card {
@@ -201,34 +211,34 @@
     background-image: linear-gradient(135deg, hsl(38 92% 55%), hsl(38 85% 70%));
   }
   
-  .text-gradient-blue {
+  .text-gradient-green {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(270 70% 60%), hsl(270 80% 70%));
+    background-image: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 70% 45%));
   }
   
-  /* Purple heading styles */
+  /* HUMSJ Green heading styles */
   .heading-blue {
-    color: hsl(270 70% 60%);
+    color: hsl(142 76% 36%);
   }
   
   .heading-blue-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(270 70% 60%), hsl(270 80% 70%));
+    background-image: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 70% 45%));
   }
   
-  /* Magenta heading styles */
+  /* HUMSJ Gold heading styles */
   .heading-yellow {
-    color: hsl(300 100% 50%);
+    color: hsl(45 93% 58%);
   }
   
   .heading-yellow-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(300 100% 50%), hsl(320 100% 60%));
+    background-image: linear-gradient(135deg, hsl(45 93% 58%), hsl(45 85% 70%));
   }
   
-  /* Pink text styles */
+  /* Light green text styles */
   .text-pink {
-    color: hsl(330 100% 70%);
+    color: hsl(142 60% 70%);
   }
 
   /* Gold accent line */
@@ -267,42 +277,54 @@
     @apply relative px-8 py-3 rounded-full font-medium transition-all duration-300;
     background: var(--gradient-gold);
     color: hsl(20 14% 4%);
-    box-shadow: 0 4px 20px hsl(38 92% 50% / 0.3);
+    box-shadow: 0 4px 20px hsl(45 93% 58% / 0.3);
   }
 
   .btn-gold:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 30px hsl(38 92% 50% / 0.4);
+    box-shadow: 0 6px 30px hsl(45 93% 58% / 0.4);
+  }
+
+  .btn-green {
+    @apply relative px-8 py-3 rounded-full font-medium transition-all duration-300;
+    background: var(--gradient-green);
+    color: hsl(0 0% 100%);
+    box-shadow: 0 4px 20px hsl(142 76% 36% / 0.3);
+  }
+
+  .btn-green:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px hsl(142 76% 36% / 0.4);
   }
 
   .btn-outline-gold {
     @apply relative px-8 py-3 rounded-full font-medium transition-all duration-300;
     background: transparent;
-    border: 1px solid hsl(38 92% 50% / 0.5);
-    color: hsl(38 92% 50%);
+    border: 1px solid hsl(45 93% 58% / 0.5);
+    color: hsl(45 93% 58%);
   }
 
   .btn-outline-gold:hover {
-    background: hsl(38 92% 50% / 0.1);
-    border-color: hsl(38 92% 50%);
+    background: hsl(45 93% 58% / 0.1);
+    border-color: hsl(45 93% 58%);
   }
 
   /* Input dark style */
   .input-dark {
     @apply rounded-lg px-4 py-3 transition-all duration-200;
     background: hsl(20 10% 12%);
-    border: 1px solid hsl(38 30% 20%);
-    color: hsl(38 25% 90%);
+    border: 1px solid hsl(142 30% 20%);
+    color: hsl(142 25% 90%);
   }
 
   .input-dark:focus {
     outline: none;
-    border-color: hsl(38 92% 50%);
-    box-shadow: 0 0 0 3px hsl(38 92% 50% / 0.1);
+    border-color: hsl(142 76% 36%);
+    box-shadow: 0 0 0 3px hsl(142 76% 36% / 0.1);
   }
 
   .input-dark::placeholder {
-    color: hsl(38 15% 40%);
+    color: hsl(142 15% 40%);
   }
   
   .animate-fade-in {
@@ -374,9 +396,9 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px hsl(38 92% 50% / 0.2);
+    box-shadow: 0 0 20px hsl(142 76% 36% / 0.2);
   }
   50% {
-    box-shadow: 0 0 40px hsl(38 92% 50% / 0.4);
+    box-shadow: 0 0 40px hsl(142 76% 36% / 0.4);
   }
 }
