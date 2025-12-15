@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import { Lock, Mail, Shield, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,26 +32,17 @@ const AdminLogin = () => {
 
     try {
       // Sign in with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
-      // Check if user is admin in Firestore
-      const userDoc = await getDoc(doc(db, "admins", userCredential.user.uid));
-      
-      if (userDoc.exists() && userDoc.data()?.isAdmin === true) {
-        toast({
-          title: "Login Successful",
-          description: "Welcome to the Admin Dashboard",
-        });
-        navigate("/admin/dashboard");
-      } else {
-        // Sign out if not admin
-        await auth.signOut();
-        setError("Access denied. You are not authorized as an admin.");
-      }
+      toast({
+        title: "Login Successful",
+        description: "Welcome to the Admin Dashboard",
+      });
+      navigate("/admin/dashboard");
     } catch (err: any) {
       let errorMessage = "Login failed. Please try again.";
       if (err.code === "auth/user-not-found") {
