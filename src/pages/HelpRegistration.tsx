@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { z } from "zod";
 
 const helpRegistrationSchema = z.object({
@@ -75,13 +76,23 @@ const HelpRegistration = () => {
       // Validate form data
       helpRegistrationSchema.parse(formData);
 
+      // Upload file to Cloudinary if present
+      let documentUrl = null;
+      if (selectedFile) {
+        toast({
+          title: "Uploading document...",
+          description: "Please wait while we upload your file",
+        });
+        documentUrl = await uploadToCloudinary(selectedFile);
+      }
+
       // Prepare submission data
       const submissionData = {
         ...formData,
-        hasDocument: !!selectedFile,
+        documentUrl,
         documentName: selectedFile?.name || null,
         status: "pending",
-        submittedAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       };
 
       // Submit to Firebase

@@ -60,7 +60,7 @@ const AssistanceRequest = () => {
       await addDoc(collection(db, "assistanceRequests"), {
         ...formData,
         status: "pending",
-        submittedAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
 
       toast({
