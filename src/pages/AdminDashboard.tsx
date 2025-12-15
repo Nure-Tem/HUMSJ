@@ -70,15 +70,20 @@ const AdminDashboard = () => {
         ...doc.data()
       }));
 
+      console.log("Help registrations:", helpData.length);
+      console.log("Children registrations:", childrenData.length);
+      console.log("Monthly charity:", monthlyData.length);
+      console.log("Charity distributions:", distributionData.length);
+
       setHelpRequests(helpData);
       setChildrenRegistrations(childrenData);
       setMonthlyCharity(monthlyData);
       setCharityDistribution(distributionData);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching submissions:", error);
       toast({
         title: "Error",
-        description: "Failed to load submissions",
+        description: error.message || "Failed to load submissions",
         variant: "destructive",
       });
     } finally {
