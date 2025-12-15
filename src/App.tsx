@@ -16,7 +16,6 @@ import Structure from "./pages/Structure";
 import ChildrenRegistration from "./pages/ChildrenRegistration";
 import MonthlyCharityRegistration from "./pages/MonthlyCharityRegistration";
 import CharityDistribution from "./pages/CharityDistribution";
-import AssistanceRequest from "./pages/AssistanceRequest";
 import HelpRegistration from "./pages/HelpRegistration";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -40,7 +39,6 @@ const App = () => (
             <Route path="/children-registration" element={<ChildrenRegistration />} />
             <Route path="/monthly-charity" element={<MonthlyCharityRegistration />} />
             <Route path="/charity-distribution" element={<CharityDistribution />} />
-            <Route path="/assistance-request" element={<AssistanceRequest />} />
             <Route path="/help-registration" element={<HelpRegistration />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/contact" element={<Contact />} />

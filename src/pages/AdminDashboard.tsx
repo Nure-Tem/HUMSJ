@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, query, orderBy, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Users, FileText, Trash2, Eye, Calendar, Phone, Mail } from "lucide-react";
+import { LogOut, Users, FileText, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +19,9 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [helpRequests, setHelpRequests] = useState<Submission[]>([]);
-  const [assistanceRequests, setAssistanceRequests] = useState<Submission[]>([]);
+  const [childrenRegistrations, setChildrenRegistrations] = useState<Submission[]>([]);
+  const [monthlyCharity, setMonthlyCharity] = useState<Submission[]>([]);
+  const [charityDistribution, setCharityDistribution] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<Submission | null>(null);
 
@@ -45,17 +47,37 @@ const AdminDashboard = () => {
         ...doc.data()
       }));
 
-      // Fetch assistance requests
-      const assistQuery = query(collection(db, "assistanceRequests"), orderBy("timestamp", "desc"));
-      const assistSnapshot = await getDocs(assistQuery);
-      const assistData = assistSnapshot.docs.map(doc => ({
+      // Fetch children registrations
+      const childrenQuery = query(collection(db, "childrenRegistrations"), orderBy("timestamp", "desc"));
+      const childrenSnapshot = await getDocs(childrenQuery);
+      const childrenData = childrenSnapshot.docs.map(doc => ({
         id: doc.id,
-        type: "assistance",
+        type: "children",
+        ...doc.data()
+      }));
+
+      // Fetch monthly charity registrations
+      const monthlyQuery = query(collection(db, "monthlyCharityRegistrations"), orderBy("timestamp", "desc"));
+      const monthlySnapshot = await getDocs(monthlyQuery);
+      const monthlyData = monthlySnapshot.docs.map(doc => ({
+        id: doc.id,
+        type: "monthly",
+        ...doc.data()
+      }));
+
+      // Fetch charity distribution
+      const distributionQuery = query(collection(db, "charityDistributions"), orderBy("timestamp", "desc"));
+      const distributionSnapshot = await getDocs(distributionQuery);
+      const distributionData = distributionSnapshot.docs.map(doc => ({
+        id: doc.id,
+        type: "distribution",
         ...doc.data()
       }));
 
       setHelpRequests(helpData);
-      setAssistanceRequests(assistData);
+      setChildrenRegistrations(childrenData);
+      setMonthlyCharity(monthlyData);
+      setCharityDistribution(distributionData);
     } catch (error) {
       console.error("Error fetching submissions:", error);
       toast({
@@ -113,7 +135,7 @@ const AdminDashboard = () => {
       <CardContent className="p-4">
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <h3 className="font-semibold text-lg mb-2">{item.fullName || item.name}</h3>
+            <h3 className="font-semibold text-lg mb-2">{item.fullName || item.name || item.childName || "N/A"}</h3>
             <div className="space-y-1 text-sm text-gray-600">
               {item.phone && (
                 <div className="flex items-center gap-2">
@@ -208,10 +230,10 @@ const AdminDashboard = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Help Registrations</CardTitle>
+              <CardTitle className="text-sm font-medium">Help Requests</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -220,19 +242,39 @@ const AdminDashboard = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Assistance Requests</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Children</CardTitle>
+              <Baby className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{assistanceRequests.length}</div>
+              <div className="text-2xl font-bold">{childrenRegistrations.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Monthly Charity</CardTitle>
+              <Heart className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{monthlyCharity.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Distributions</CardTitle>
+              <Gift className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{charityDistribution.length}</div>
             </CardContent>
           </Card>
         </div>
 
         <Tabs defaultValue="help" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="help">Help Registrations</TabsTrigger>
-            <TabsTrigger value="assistance">Assistance Requests</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="help">Help Requests</TabsTrigger>
+            <TabsTrigger value="children">Children</TabsTrigger>
+            <TabsTrigger value="monthly">Monthly Charity</TabsTrigger>
+            <TabsTrigger value="distribution">Distributions</TabsTrigger>
           </TabsList>
           <TabsContent value="help" className="mt-6">
             {helpRequests.length === 0 ? (
@@ -243,12 +285,30 @@ const AdminDashboard = () => {
               ))
             )}
           </TabsContent>
-          <TabsContent value="assistance" className="mt-6">
-            {assistanceRequests.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">No assistance requests yet</p>
+          <TabsContent value="children" className="mt-6">
+            {childrenRegistrations.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No children registrations yet</p>
             ) : (
-              assistanceRequests.map(item => (
-                <SubmissionCard key={item.id} item={item} collectionName="assistanceRequests" />
+              childrenRegistrations.map(item => (
+                <SubmissionCard key={item.id} item={item} collectionName="childrenRegistrations" />
+              ))
+            )}
+          </TabsContent>
+          <TabsContent value="monthly" className="mt-6">
+            {monthlyCharity.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No monthly charity registrations yet</p>
+            ) : (
+              monthlyCharity.map(item => (
+                <SubmissionCard key={item.id} item={item} collectionName="monthlyCharityRegistrations" />
+              ))
+            )}
+          </TabsContent>
+          <TabsContent value="distribution" className="mt-6">
+            {charityDistribution.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No charity distributions yet</p>
+            ) : (
+              charityDistribution.map(item => (
+                <SubmissionCard key={item.id} item={item} collectionName="charityDistributions" />
               ))
             )}
           </TabsContent>
