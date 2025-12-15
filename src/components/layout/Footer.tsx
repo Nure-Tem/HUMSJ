@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Instagram, Youtube, Send, Shield } from "lucide-react";
 import logo from "@/assets/humsj-logo.jpg";
 
 export function Footer() {
@@ -103,10 +103,17 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-primary/20 pt-6 text-center">
+        <div className="mt-12 border-t border-primary/20 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Haramaya University Muslim Students Jema'a. All rights reserved.
           </p>
+          <Link
+            to="/admin/login"
+            className="flex items-center gap-2 text-xs text-muted-foreground/60 hover:text-primary transition-colors"
+          >
+            <Shield className="h-3 w-3" />
+            Admin
+          </Link>
         </div>
       </div>
     </footer>
