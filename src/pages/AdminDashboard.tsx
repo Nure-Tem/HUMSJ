@@ -197,9 +197,28 @@ const AdminDashboard = () => {
           <CardTitle className="heading-blue">Submission Details</CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Show document image if available */}
+          {item.documentUrl && (
+            <div className="mb-4">
+              <p className="font-semibold mb-2">Uploaded Document:</p>
+              <img 
+                src={item.documentUrl} 
+                alt="Uploaded document" 
+                className="max-w-full h-auto rounded-lg border shadow-sm"
+              />
+              <a 
+                href={item.documentUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline text-sm mt-2 inline-block"
+              >
+                Open in new tab
+              </a>
+            </div>
+          )}
           <div className="space-y-3">
             {Object.entries(item).map(([key, value]) => {
-              if (key === "id" || key === "type") return null;
+              if (key === "id" || key === "type" || key === "documentUrl") return null;
               return (
                 <div key={key} className="border-b pb-2">
                   <span className="font-semibold capitalize">{key.replace(/([A-Z])/g, " $1")}: </span>
