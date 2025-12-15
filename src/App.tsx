@@ -18,6 +18,8 @@ import MonthlyCharityRegistration from "./pages/MonthlyCharityRegistration";
 import CharityDistribution from "./pages/CharityDistribution";
 import AssistanceRequest from "./pages/AssistanceRequest";
 import HelpRegistration from "./pages/HelpRegistration";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +45,8 @@ const App = () => (
             <Route path="/donate" element={<Donate />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/news" element={<News />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
