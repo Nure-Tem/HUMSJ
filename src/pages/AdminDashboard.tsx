@@ -233,6 +233,7 @@ const AdminDashboard = () => {
                 </div>
               );
             })}
+            })}
           </div>
           <Button onClick={onClose} className="mt-4 w-full">
             Close
