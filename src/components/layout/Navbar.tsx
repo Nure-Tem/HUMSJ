@@ -12,6 +12,8 @@ const navLinks = [
   { name: "Programs", path: "/programs" },
   { name: "Register Child", path: "/children-registration" },
   { name: "Monthly Charity", path: "/monthly-charity" },
+  { name: "Help Registration", path: "/help-registration" },
+  { name: "Charity Distribution", path: "/charity-distribution" },
   { name: "Donate", path: "/donate" },
   { name: "News", path: "/news" },
   { name: "Contact", path: "/contact" },
