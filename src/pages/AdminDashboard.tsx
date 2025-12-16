@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare } from "lucide-react";
+import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare, FileText, Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +23,7 @@ const AdminDashboard = () => {
   const [monthlyCharity, setMonthlyCharity] = useState<Submission[]>([]);
   const [charityDistribution, setCharityDistribution] = useState<Submission[]>([]);
   const [contactMessages, setContactMessages] = useState<Submission[]>([]);
+  const [posts, setPosts] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<Submission | null>(null);
 
@@ -79,17 +80,27 @@ const AdminDashboard = () => {
         ...doc.data()
       }));
 
+      // Fetch posts (news and events)
+      const postsSnapshot = await getDocs(collection(db, "posts"));
+      const postsData = postsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        type: "post",
+        ...doc.data()
+      }));
+
       console.log("Help registrations:", helpData.length);
       console.log("Children registrations:", childrenData.length);
       console.log("Monthly charity:", monthlyData.length);
       console.log("Charity distributions:", distributionData.length);
       console.log("Contact messages:", contactData.length);
+      console.log("Posts:", postsData.length);
 
       setHelpRequests(helpData);
       setChildrenRegistrations(childrenData);
       setMonthlyCharity(monthlyData);
       setCharityDistribution(distributionData);
       setContactMessages(contactData);
+      setPosts(postsData);
     } catch (error: any) {
       console.error("Error fetching submissions:", error);
       toast({
@@ -190,6 +201,79 @@ const AdminDashboard = () => {
     </Card>
   );
 
+  const PostCard = ({ item }: { item: Submission }) => (
+    <Card className="mb-4 hover:shadow-lg transition-shadow">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            {item.videoUrl ? (
+              <video 
+                src={item.videoUrl} 
+                className="w-full h-32 object-cover rounded-lg mb-3"
+                controls
+                poster={item.imageUrl}
+              />
+            ) : item.imageUrl ? (
+              <img 
+                src={item.imageUrl} 
+                alt={item.title} 
+                className="w-full h-32 object-cover rounded-lg mb-3"
+              />
+            ) : null}
+            {item.audioUrl && (
+              <div className="mb-3">
+                <audio controls className="w-full">
+                  <source src={item.audioUrl} type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            )}
+            <div className="flex items-center gap-2 mb-2">
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                item.type === 'news' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+              }`}>
+                {item.type === 'news' ? 'News' : 'Event'}
+              </span>
+              <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                {item.category}
+              </span>
+            </div>
+            <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+            <p className="text-sm text-gray-600 mb-2 line-clamp-2">{item.content}</p>
+            <div className="space-y-1 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>{formatDate(item.timestamp)}</span>
+              </div>
+              {item.eventDate && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span>Event: {new Date(item.eventDate).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSelectedItem(item)}
+            >
+              <Eye className="h-4 w-4" />
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => handleDelete(item.id, "posts")}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   const DetailModal = ({ item, onClose }: { item: Submission; onClose: () => void }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -213,6 +297,36 @@ const AdminDashboard = () => {
               >
                 Open in new tab
               </a>
+            </div>
+          )}
+          {item.imageUrl && (
+            <div className="mb-4">
+              <p className="font-semibold mb-2">Featured Image:</p>
+              <img 
+                src={item.imageUrl} 
+                alt="Featured image" 
+                className="max-w-full h-auto rounded-lg border shadow-sm"
+              />
+            </div>
+          )}
+          {item.videoUrl && (
+            <div className="mb-4">
+              <p className="font-semibold mb-2">Video:</p>
+              <video 
+                src={item.videoUrl} 
+                className="max-w-full h-auto rounded-lg border shadow-sm"
+                controls
+                poster={item.imageUrl}
+              />
+            </div>
+          )}
+          {item.audioUrl && (
+            <div className="mb-4">
+              <p className="font-semibold mb-2">Audio:</p>
+              <audio controls className="w-full">
+                <source src={item.audioUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
             </div>
           )}
           <div className="space-y-3">
@@ -252,15 +366,24 @@ const AdminDashboard = () => {
       <div className="bg-white shadow">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold heading-blue">HUMSJ Admin Dashboard</h1>
-          <Button onClick={handleLogout} variant="outline">
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => navigate("/admin/create-post")}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Create Post
+            </Button>
+            <Button onClick={handleLogout} variant="outline">
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Help Requests</CardTitle>
@@ -306,15 +429,25 @@ const AdminDashboard = () => {
               <div className="text-2xl font-bold">{contactMessages.length}</div>
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Posts</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{posts.length}</div>
+            </CardContent>
+          </Card>
         </div>
 
         <Tabs defaultValue="help" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="help">Help</TabsTrigger>
             <TabsTrigger value="children">Children</TabsTrigger>
             <TabsTrigger value="monthly">Monthly</TabsTrigger>
             <TabsTrigger value="distribution">Distribution</TabsTrigger>
             <TabsTrigger value="messages">Messages</TabsTrigger>
+            <TabsTrigger value="posts">Posts</TabsTrigger>
           </TabsList>
           <TabsContent value="help" className="mt-6">
             {helpRequests.length === 0 ? (
@@ -358,6 +491,15 @@ const AdminDashboard = () => {
             ) : (
               contactMessages.map(item => (
                 <SubmissionCard key={item.id} item={item} collectionName="contacts" />
+              ))
+            )}
+          </TabsContent>
+          <TabsContent value="posts" className="mt-6">
+            {posts.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No posts yet</p>
+            ) : (
+              posts.map(item => (
+                <PostCard key={item.id} item={item} />
               ))
             )}
           </TabsContent>

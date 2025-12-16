@@ -19,6 +19,7 @@ import CharityDistribution from "./pages/CharityDistribution";
 import HelpRegistration from "./pages/HelpRegistration";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import CreatePost from "./pages/CreatePost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/news" element={<News />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/create-post" element={<CreatePost />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

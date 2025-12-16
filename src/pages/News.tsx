@@ -3,7 +3,7 @@ import { Calendar, ArrowRight, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, where } from "firebase/firestore";
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
 import news3 from "@/assets/news-3.jpg";
@@ -17,11 +17,17 @@ import news9 from "@/assets/news-9.jpg";
 interface NewsItem {
   id: string;
   title: string;
-  excerpt: string;
+  excerpt?: string;
   content: string;
-  date: string;
+  date?: string;
+  timestamp?: any;
   category: string;
+  type?: string;
   image?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  audioUrl?: string;
+  eventDate?: string;
 }
 
 // Sample news data (will be replaced by Firebase data)
@@ -145,7 +151,7 @@ const sampleNews: NewsItem[] = [
   },
 ];
 
-const categories = ["All", "Events", "Charity", "Education", "Achievement", "Community", "News"];
+const categories = ["All", "Events", "Charity", "Education", "Achievement", "Community", "News", "General", "Workshop", "Lecture", "Charity Event", "Community Gathering", "Religious Event", "Announcement"];
 
 export default function News() {
   const [news, setNews] = useState<NewsItem[]>(sampleNews);
@@ -155,20 +161,49 @@ export default function News() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const newsRef = collection(db, "news");
-        const q = query(newsRef, orderBy("date", "desc"), limit(20));
+        // Fetch posts from Firebase
+        const postsRef = collection(db, "posts");
+        const q = query(
+          postsRef, 
+          orderBy("timestamp", "desc"), 
+          limit(50)
+        );
         const snapshot = await getDocs(q);
         
         if (!snapshot.empty) {
-          const newsData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as NewsItem[];
-          setNews(newsData);
+          const postsData = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              title: data.title,
+              content: data.content,
+              excerpt: data.content?.substring(0, 150) + "...",
+              category: data.category,
+              type: data.type,
+              image: data.imageUrl,
+              imageUrl: data.imageUrl,
+              videoUrl: data.videoUrl,
+              audioUrl: data.audioUrl,
+              date: data.timestamp ? data.timestamp.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+              timestamp: data.timestamp,
+              eventDate: data.eventDate,
+            };
+          }) as NewsItem[];
+          
+          console.log("Firebase posts loaded:", postsData.length);
+          console.log("Posts data:", postsData);
+          
+          // Combine Firebase posts with sample news
+          const combinedNews = [...postsData, ...sampleNews];
+          setNews(combinedNews);
+        } else {
+          console.log("No Firebase posts found, using sample data only");
+          // Use sample data if no Firebase posts
+          setNews(sampleNews);
         }
       } catch (error) {
-        // Use sample data if Firebase fetch fails
-        console.log("Using sample news data");
+        console.error("Error fetching posts, using sample data:", error);
+        setNews(sampleNews);
       } finally {
         setLoading(false);
       }
@@ -252,11 +287,20 @@ export default function News() {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="aspect-video overflow-hidden">
-                    <img
-                      src={item.image || "https://images.unsplash.com/photo-1585036156171-384164a8c675?w=600&h=400&fit=crop"}
-                      alt={item.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
+                    {item.videoUrl ? (
+                      <video
+                        src={item.videoUrl}
+                        className="h-full w-full object-cover"
+                        controls
+                        poster={item.imageUrl || item.image}
+                      />
+                    ) : (
+                      <img
+                        src={item.imageUrl || item.image || "https://images.unsplash.com/photo-1585036156171-384164a8c675?w=600&h=400&fit=crop"}
+                        alt={item.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                   </div>
                   <CardHeader className="pb-2">
                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -274,8 +318,16 @@ export default function News() {
                       {item.title}
                     </h3>
                     <p className="text-sm text-muted-foreground line-clamp-3">
-                      {item.excerpt}
+                      {item.excerpt || (item.content?.substring(0, 150) + "...")}
                     </p>
+                    {item.audioUrl && (
+                      <div className="mt-3">
+                        <audio controls className="w-full">
+                          <source src={item.audioUrl} type="audio/mpeg" />
+                          Your browser does not support the audio element.
+                        </audio>
+                      </div>
+                    )}
                     <Button variant="link" className="mt-4 h-auto p-0 text-primary">
                       Read More
                       <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
