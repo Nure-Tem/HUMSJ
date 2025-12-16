@@ -20,6 +20,7 @@ import HelpRegistration from "./pages/HelpRegistration";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import CreatePost from "./pages/CreatePost";
+import MediaLibrary from "./pages/MediaLibrary";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/create-post" element={<CreatePost />} />
+            <Route path="/admin/media-library" element={<MediaLibrary />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

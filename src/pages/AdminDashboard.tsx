@@ -374,6 +374,13 @@ const AdminDashboard = () => {
               <Plus className="h-4 w-4 mr-2" />
               Create Post
             </Button>
+            <Button 
+              onClick={() => navigate("/admin/media-library")}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Media Library
+            </Button>
             <Button onClick={handleLogout} variant="outline">
               <LogOut className="h-4 w-4 mr-2" />
               Logout
