@@ -39,6 +39,8 @@ const MediaLibrary = () => {
   const [filterCategory, setFilterCategory] = useState("all");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedFile, setSelectedFile] = useState<MediaFile | null>(null);
+  const [uploadCategory, setUploadCategory] = useState("General");
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const categories = [
     "General", "News", "Events", "Charity", "Education", 
@@ -133,6 +135,25 @@ const MediaLibrary = () => {
     }
   };
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    if (e.dataTransfer.files) {
+      setSelectedFiles(e.dataTransfer.files);
+    }
+  };
+
   const handleUpload = async (category: string = "General") => {
     if (!selectedFiles || selectedFiles.length === 0) {
       toast({
@@ -144,7 +165,8 @@ const MediaLibrary = () => {
     }
 
     setIsUploading(true);
-    const uploadPromises = [];
+    let successCount = 0;
+    let failCount = 0;
 
     for (let i = 0; i < selectedFiles.length; i++) {
       const file = selectedFiles[i];
@@ -164,60 +186,58 @@ const MediaLibrary = () => {
           description: `${file.name} exceeds the size limit for ${fileType} files`,
           variant: "destructive",
         });
+        failCount++;
         continue;
       }
 
-      uploadPromises.push(
-        uploadToCloudinary(file).then(async (url) => {
-          const fileData = {
-            name: `${Date.now()}_${file.name}`,
-            originalName: file.name,
-            url,
-            type: fileType,
-            size: file.size,
-            category,
-            uploadDate: serverTimestamp(),
-          };
+      try {
+        toast({
+          title: "Uploading...",
+          description: `Uploading ${file.name}`,
+        });
 
-          await addDoc(collection(db, "mediaLibrary"), fileData);
-          return fileData;
-        }).catch(error => {
-          console.error(`Upload failed for ${file.name}:`, error);
-          toast({
-            title: "Upload Failed",
-            description: `Failed to upload ${file.name}`,
-            variant: "destructive",
-          });
-          return null;
-        })
-      );
+        const url = await uploadToCloudinary(file);
+        
+        const fileData = {
+          name: `${Date.now()}_${file.name}`,
+          originalName: file.name,
+          url,
+          type: fileType,
+          size: file.size,
+          category,
+          uploadDate: serverTimestamp(),
+        };
+
+        await addDoc(collection(db, "mediaLibrary"), fileData);
+        successCount++;
+        
+        toast({
+          title: "Upload Success",
+          description: `${file.name} uploaded successfully`,
+        });
+      } catch (error) {
+        console.error(`Upload failed for ${file.name}:`, error);
+        toast({
+          title: "Upload Failed",
+          description: `Failed to upload ${file.name}`,
+          variant: "destructive",
+        });
+        failCount++;
+      }
     }
 
-    try {
-      const results = await Promise.all(uploadPromises);
-      const successCount = results.filter(r => r !== null).length;
-      
-      toast({
-        title: "Upload Complete",
-        description: `Successfully uploaded ${successCount} of ${selectedFiles.length} files`,
-      });
+    toast({
+      title: "Upload Complete",
+      description: `Successfully uploaded ${successCount} files${failCount > 0 ? `, ${failCount} failed` : ''}`,
+    });
 
-      // Clear selected files and refresh
-      setSelectedFiles(null);
-      const fileInput = document.getElementById("file-upload") as HTMLInputElement;
-      if (fileInput) fileInput.value = "";
-      
-      fetchFiles();
-    } catch (error) {
-      console.error("Upload error:", error);
-      toast({
-        title: "Upload Error",
-        description: "Some files failed to upload",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
-    }
+    // Clear selected files and refresh
+    setSelectedFiles(null);
+    const fileInput = document.getElementById("file-upload") as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
+    
+    fetchFiles();
+    setIsUploading(false);
   };
 
   const handleDelete = async (fileId: string, fileName: string) => {
@@ -368,32 +388,64 @@ const MediaLibrary = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                  <Card className="p-4 text-center">
+                  <Card className="p-4 text-center hover:shadow-md transition-shadow cursor-pointer" onClick={() => document.getElementById('image-upload')?.click()}>
                     <ImageIcon className="h-8 w-8 mx-auto mb-2 text-green-600" />
                     <p className="text-sm font-medium">Images</p>
                     <p className="text-xs text-gray-500">Up to 10MB</p>
+                    <input
+                      id="image-upload"
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="sr-only"
+                    />
                   </Card>
-                  <Card className="p-4 text-center">
+                  <Card className="p-4 text-center hover:shadow-md transition-shadow cursor-pointer" onClick={() => document.getElementById('video-upload')?.click()}>
                     <Video className="h-8 w-8 mx-auto mb-2 text-blue-600" />
                     <p className="text-sm font-medium">Videos</p>
                     <p className="text-xs text-gray-500">Up to 100MB</p>
+                    <input
+                      id="video-upload"
+                      type="file"
+                      multiple
+                      accept="video/*"
+                      onChange={handleFileSelect}
+                      className="sr-only"
+                    />
                   </Card>
-                  <Card className="p-4 text-center">
+                  <Card className="p-4 text-center hover:shadow-md transition-shadow cursor-pointer" onClick={() => document.getElementById('audio-upload')?.click()}>
                     <Music className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                     <p className="text-sm font-medium">Audio</p>
                     <p className="text-xs text-gray-500">Up to 50MB</p>
+                    <input
+                      id="audio-upload"
+                      type="file"
+                      multiple
+                      accept="audio/*"
+                      onChange={handleFileSelect}
+                      className="sr-only"
+                    />
                   </Card>
-                  <Card className="p-4 text-center">
+                  <Card className="p-4 text-center hover:shadow-md transition-shadow cursor-pointer" onClick={() => document.getElementById('document-upload')?.click()}>
                     <FileText className="h-8 w-8 mx-auto mb-2 text-orange-600" />
                     <p className="text-sm font-medium">Documents</p>
                     <p className="text-xs text-gray-500">Up to 20MB</p>
+                    <input
+                      id="document-upload"
+                      type="file"
+                      multiple
+                      accept=".pdf,.doc,.docx,.txt,.xlsx,.xls,.ppt,.pptx"
+                      onChange={handleFileSelect}
+                      className="sr-only"
+                    />
                   </Card>
                 </div>
 
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="category">Category</Label>
-                    <Select defaultValue="General">
+                    <Select value={uploadCategory} onValueChange={setUploadCategory}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
@@ -407,16 +459,27 @@ const MediaLibrary = () => {
                     </Select>
                   </div>
 
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8">
+                  <div 
+                    className={`border-2 border-dashed rounded-lg p-8 transition-colors ${
+                      isDragOver 
+                        ? 'border-green-400 bg-green-50' 
+                        : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                  >
                     <div className="text-center">
-                      <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                      <Upload className={`mx-auto h-12 w-12 mb-4 ${
+                        isDragOver ? 'text-green-500' : 'text-gray-400'
+                      }`} />
                       <div>
                         <label htmlFor="file-upload" className="cursor-pointer">
                           <span className="mt-2 block text-lg font-medium text-gray-900">
-                            Click to upload files or drag and drop
+                            {isDragOver ? 'Drop files here' : 'Click to upload files or drag and drop'}
                           </span>
                           <span className="mt-1 block text-sm text-gray-500">
-                            Multiple files supported
+                            Multiple files supported • Images, Videos, Audio, Documents
                           </span>
                         </label>
                         <input
@@ -424,6 +487,7 @@ const MediaLibrary = () => {
                           name="file-upload"
                           type="file"
                           multiple
+                          accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.xlsx,.xls,.ppt,.pptx"
                           onChange={handleFileSelect}
                           className="sr-only"
                         />
@@ -447,11 +511,11 @@ const MediaLibrary = () => {
                   )}
 
                   <Button 
-                    onClick={() => handleUpload("General")} 
+                    onClick={() => handleUpload(uploadCategory)} 
                     disabled={!selectedFiles || isUploading}
                     className="w-full bg-green-600 hover:bg-green-700"
                   >
-                    {isUploading ? "Uploading..." : "Upload Files"}
+                    {isUploading ? "Uploading..." : `Upload ${selectedFiles?.length || 0} Files`}
                   </Button>
                 </div>
               </CardContent>
