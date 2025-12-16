@@ -381,6 +381,13 @@ const AdminDashboard = () => {
               <FileText className="h-4 w-4 mr-2" />
               Media Library
             </Button>
+            <Button 
+              onClick={() => navigate("/admin/manage-news")}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Manage News
+            </Button>
             <Button onClick={handleLogout} variant="outline">
               <LogOut className="h-4 w-4 mr-2" />
               Logout

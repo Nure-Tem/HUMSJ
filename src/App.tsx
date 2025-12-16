@@ -21,6 +21,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import CreatePost from "./pages/CreatePost";
 import MediaLibrary from "./pages/MediaLibrary";
+import ManageNews from "./pages/ManageNews";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/create-post" element={<CreatePost />} />
             <Route path="/admin/media-library" element={<MediaLibrary />} />
+            <Route path="/admin/manage-news" element={<ManageNews />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

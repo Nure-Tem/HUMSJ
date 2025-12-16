@@ -163,46 +163,91 @@ export default function News() {
       try {
         // Fetch posts from Firebase
         const postsRef = collection(db, "posts");
-        const q = query(
+        const postsQuery = query(
           postsRef, 
           orderBy("timestamp", "desc"), 
           limit(50)
         );
-        const snapshot = await getDocs(q);
+        const postsSnapshot = await getDocs(postsQuery);
         
-        if (!snapshot.empty) {
-          const postsData = snapshot.docs.map((doc) => {
+        const postsData = postsSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            title: data.title,
+            content: data.content,
+            excerpt: data.content?.substring(0, 150) + "...",
+            category: data.category,
+            type: data.type,
+            image: data.imageUrl,
+            imageUrl: data.imageUrl,
+            videoUrl: data.videoUrl,
+            audioUrl: data.audioUrl,
+            date: data.timestamp ? data.timestamp.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+            timestamp: data.timestamp,
+            eventDate: data.eventDate,
+          };
+        }) as NewsItem[];
+
+        // Fetch default news items
+        const defaultNewsRef = collection(db, "defaultNews");
+        const defaultNewsQuery = query(defaultNewsRef, orderBy("date", "desc"));
+        const defaultNewsSnapshot = await getDocs(defaultNewsQuery);
+        
+        let defaultNewsData: NewsItem[] = [];
+        if (!defaultNewsSnapshot.empty) {
+          defaultNewsData = defaultNewsSnapshot.docs.map((doc) => {
             const data = doc.data();
             return {
               id: doc.id,
               title: data.title,
               content: data.content,
-              excerpt: data.content?.substring(0, 150) + "...",
+              excerpt: data.excerpt,
               category: data.category,
-              type: data.type,
-              image: data.imageUrl,
-              imageUrl: data.imageUrl,
-              videoUrl: data.videoUrl,
-              audioUrl: data.audioUrl,
-              date: data.timestamp ? data.timestamp.toDate().toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-              timestamp: data.timestamp,
-              eventDate: data.eventDate,
+              image: data.image,
+              imageUrl: data.image,
+              date: data.date,
             };
           }) as NewsItem[];
-          
-          console.log("Firebase posts loaded:", postsData.length);
-          console.log("Posts data:", postsData);
-          
-          // Combine Firebase posts with sample news
-          const combinedNews = [...postsData, ...sampleNews];
-          setNews(combinedNews);
         } else {
-          console.log("No Firebase posts found, using sample data only");
-          // Use sample data if no Firebase posts
-          setNews(sampleNews);
+          // Use sample data if no default news in Firebase
+          defaultNewsData = sampleNews;
         }
+
+        // Fetch custom news items
+        const customNewsRef = collection(db, "customNews");
+        const customNewsQuery = query(customNewsRef, orderBy("date", "desc"));
+        const customNewsSnapshot = await getDocs(customNewsQuery);
+        
+        const customNewsData = customNewsSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            title: data.title,
+            content: data.content,
+            excerpt: data.excerpt,
+            category: data.category,
+            image: data.image,
+            imageUrl: data.image,
+            date: data.date,
+          };
+        }) as NewsItem[];
+        
+        console.log("Firebase posts loaded:", postsData.length);
+        console.log("Default news loaded:", defaultNewsData.length);
+        console.log("Custom news loaded:", customNewsData.length);
+        
+        // Combine all news sources and sort by date
+        const allNews = [...postsData, ...defaultNewsData, ...customNewsData];
+        const sortedNews = allNews.sort((a, b) => {
+          const dateA = new Date(a.date || '1970-01-01').getTime();
+          const dateB = new Date(b.date || '1970-01-01').getTime();
+          return dateB - dateA;
+        });
+        
+        setNews(sortedNews);
       } catch (error) {
-        console.error("Error fetching posts, using sample data:", error);
+        console.error("Error fetching news, using sample data:", error);
         setNews(sampleNews);
       } finally {
         setLoading(false);
