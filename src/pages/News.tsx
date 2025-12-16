@@ -39,7 +39,7 @@ const sampleNews: NewsItem[] = [
     content: "Our annual Quran competition brought together over 100 participants from across the university...",
     date: "2024-12-01",
     category: "Events",
-    image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=600&h=400&fit=crop",
   },
   {
     id: "2",
@@ -48,7 +48,7 @@ const sampleNews: NewsItem[] = [
     content: "Through the generosity of our donors, we have reached an important milestone in our orphan sponsorship...",
     date: "2024-10-20",
     category: "Achievement",
-    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=400&fit=crop",
+    image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop",
   },
   {
     id: "3",
