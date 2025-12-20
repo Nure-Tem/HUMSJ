@@ -63,6 +63,8 @@ const AdminLogin = () => {
         errorMessage = "Invalid email address.";
       } else if (err.code === "auth/too-many-requests") {
         errorMessage = "Too many failed attempts. Please try again later.";
+      } else if (err.code === "auth/invalid-credential") {
+        errorMessage = "Invalid email or password.";
       }
       setError(errorMessage);
     } finally {
@@ -79,9 +81,9 @@ const AdminLogin = () => {
               <Shield className="h-8 w-8 text-purple-600" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold heading-blue">Admin Login</CardTitle>
+          <CardTitle className="text-2xl font-bold heading-blue">HUMSJ Admin Login</CardTitle>
           <CardDescription>
-            Enter your credentials to access the admin dashboard
+            Enter your credentials to access your dashboard
           </CardDescription>
         </CardHeader>
         <CardContent>

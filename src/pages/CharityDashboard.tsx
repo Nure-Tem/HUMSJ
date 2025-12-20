@@ -31,7 +31,7 @@ const CharityDashboard = () => {
 
   const checkAuth = () => {
     if (!auth.currentUser) {
-      navigate("/admin/charity/login");
+      navigate("/admin/login");
     }
   };
 
@@ -80,7 +80,7 @@ const CharityDashboard = () => {
     try {
       await auth.signOut();
       toast({ title: "Logged Out", description: "You have been successfully logged out" });
-      navigate("/admin/charity/login");
+      navigate("/admin/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
