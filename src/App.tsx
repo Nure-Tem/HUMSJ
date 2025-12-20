@@ -25,6 +25,9 @@ import ManageNews from "./pages/ManageNews";
 import QiratDashboard from "./pages/QiratDashboard";
 import DawaDashboard from "./pages/DawaDashboard";
 import CharityDashboard from "./pages/CharityDashboard";
+import QiratCreatePost from "./pages/QiratCreatePost";
+import DawaCreatePost from "./pages/DawaCreatePost";
+import CharityCreatePost from "./pages/CharityCreatePost";
 import QiratLogin from "./pages/QiratLogin";
 import DawaLogin from "./pages/DawaLogin";
 import CharityLogin from "./pages/CharityLogin";
@@ -69,8 +72,11 @@ const App = () => (
               </ProtectedRoute>
             } />
             <Route path="/admin/qirat" element={<QiratDashboard />} />
+            <Route path="/admin/qirat/create" element={<QiratCreatePost />} />
             <Route path="/admin/dawa" element={<DawaDashboard />} />
+            <Route path="/admin/dawa/create" element={<DawaCreatePost />} />
             <Route path="/admin/charity" element={<CharityDashboard />} />
+            <Route path="/admin/charity/create" element={<CharityCreatePost />} />
             <Route path="/admin/create-post" element={
               <ProtectedRoute allowedRoles={['superadmin', 'qirat', 'dawa']}>
                 <CreatePost />

@@ -276,7 +276,7 @@ const DawaDashboard = () => {
           </div>
           <div className="flex gap-3">
             <Button 
-              onClick={() => navigate("/admin/create-post")}
+              onClick={() => navigate("/admin/dawa/create")}
               className="bg-white text-blue-700 hover:bg-blue-50"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -354,7 +354,7 @@ const DawaDashboard = () => {
                     <Megaphone className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500 mb-4">No Dawa content yet</p>
                     <Button 
-                      onClick={() => navigate("/admin/create-post")}
+                      onClick={() => navigate("/admin/dawa/create")}
                       className="bg-blue-600 hover:bg-blue-700"
                     >
                       <Plus className="h-4 w-4 mr-2" />

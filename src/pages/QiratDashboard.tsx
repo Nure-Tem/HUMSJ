@@ -300,7 +300,7 @@ const QiratDashboard = () => {
           </div>
           <div className="flex gap-3">
             <Button 
-              onClick={() => navigate("/admin/create-post")}
+              onClick={() => navigate("/admin/qirat/create")}
               className="bg-white text-emerald-700 hover:bg-emerald-50"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -391,7 +391,7 @@ const QiratDashboard = () => {
                     <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500 mb-4">No Qirat content yet</p>
                     <Button 
-                      onClick={() => navigate("/admin/create-post")}
+                      onClick={() => navigate("/admin/qirat/create")}
                       className="bg-emerald-600 hover:bg-emerald-700"
                     >
                       <Plus className="h-4 w-4 mr-2" />
