@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
-import { UserRole, roleDashboardRoutes, roleDisplayNames } from "@/lib/roles";
+import { auth } from "@/lib/firebase";
 import { Lock, Mail, Shield, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+
+// Define which emails belong to which role
+const emailRoleMap: Record<string, { role: string; dashboard: string; displayName: string }> = {
+  'qirat@example.com': { role: 'qirat', dashboard: '/admin/qirat', displayName: 'Qirat Department' },
+  'dawa@example.com': { role: 'dawa', dashboard: '/admin/dawa', displayName: 'Dawa Department' },
+  'charity@example.com': { role: 'charity', dashboard: '/admin/charity', displayName: 'Charity Department' },
+};
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -40,19 +45,26 @@ const AdminLogin = () => {
         formData.password
       );
 
-      // Fetch user role from Firestore
-      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-      const userData = userDoc.data();
-      const role = (userData?.role as UserRole) || 'superadmin';
+      const userEmail = userCredential.user.email?.toLowerCase() || '';
       
-      // Get the appropriate dashboard route based on role
-      const dashboardRoute = roleDashboardRoutes[role];
-
-      toast({
-        title: "Login Successful",
-        description: `Welcome to the ${roleDisplayNames[role]} Dashboard`,
-      });
-      navigate(dashboardRoute);
+      // Check if email matches a subsector admin
+      const roleInfo = emailRoleMap[userEmail];
+      
+      if (roleInfo) {
+        // Subsector admin - redirect to their specific dashboard
+        toast({
+          title: "Login Successful",
+          description: `Welcome to the ${roleInfo.displayName} Dashboard`,
+        });
+        navigate(roleInfo.dashboard);
+      } else {
+        // Not a subsector admin - treat as superadmin
+        toast({
+          title: "Login Successful",
+          description: "Welcome to the Super Admin Dashboard",
+        });
+        navigate('/admin/dashboard');
+      }
     } catch (err: any) {
       let errorMessage = "Login failed. Please try again.";
       if (err.code === "auth/user-not-found") {
