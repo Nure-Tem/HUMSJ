@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import { Lock, Mail, BookOpen, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,17 +36,6 @@ const QiratLogin = () => {
         formData.email,
         formData.password
       );
-
-      // Check if user has qirat or superadmin role
-      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-      const userData = userDoc.data();
-      const role = userData?.role || 'superadmin';
-
-      if (role !== 'qirat' && role !== 'superadmin') {
-        await auth.signOut();
-        setError("You don't have access to the Qirat dashboard.");
-        return;
-      }
 
       toast({
         title: "Login Successful",

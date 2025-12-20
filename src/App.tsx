@@ -68,21 +68,9 @@ const App = () => (
                 <AdminDashboard />
               </ProtectedRoute>
             } />
-            <Route path="/admin/qirat" element={
-              <ProtectedRoute allowedRoles={['superadmin', 'qirat']}>
-                <QiratDashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/dawa" element={
-              <ProtectedRoute allowedRoles={['superadmin', 'dawa']}>
-                <DawaDashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/charity" element={
-              <ProtectedRoute allowedRoles={['superadmin', 'charity']}>
-                <CharityDashboard />
-              </ProtectedRoute>
-            } />
+            <Route path="/admin/qirat" element={<QiratDashboard />} />
+            <Route path="/admin/dawa" element={<DawaDashboard />} />
+            <Route path="/admin/charity" element={<CharityDashboard />} />
             <Route path="/admin/create-post" element={
               <ProtectedRoute allowedRoles={['superadmin', 'qirat', 'dawa']}>
                 <CreatePost />
@@ -103,21 +91,9 @@ const App = () => (
                 <SuperAdminSettings />
               </ProtectedRoute>
             } />
-            <Route path="/admin/qirat/settings" element={
-              <ProtectedRoute allowedRoles={['superadmin', 'qirat']}>
-                <QiratSettings />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/dawa/settings" element={
-              <ProtectedRoute allowedRoles={['superadmin', 'dawa']}>
-                <DawaSettings />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/charity/settings" element={
-              <ProtectedRoute allowedRoles={['superadmin', 'charity']}>
-                <CharitySettings />
-              </ProtectedRoute>
-            } />
+            <Route path="/admin/qirat/settings" element={<QiratSettings />} />
+            <Route path="/admin/dawa/settings" element={<DawaSettings />} />
+            <Route path="/admin/charity/settings" element={<CharitySettings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
