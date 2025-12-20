@@ -43,7 +43,7 @@ const DawaDashboard = () => {
 
   const checkAuth = () => {
     if (!auth.currentUser) {
-      navigate("/admin/login");
+      navigate("/admin/dawa/login");
     }
   };
 
@@ -85,7 +85,7 @@ const DawaDashboard = () => {
     try {
       await auth.signOut();
       toast({ title: "Logged Out", description: "You have been successfully logged out" });
-      navigate("/admin/login");
+      navigate("/admin/dawa/login");
     } catch (error) {
       console.error("Logout error:", error);
     }

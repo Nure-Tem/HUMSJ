@@ -25,6 +25,9 @@ import ManageNews from "./pages/ManageNews";
 import QiratDashboard from "./pages/QiratDashboard";
 import DawaDashboard from "./pages/DawaDashboard";
 import CharityDashboard from "./pages/CharityDashboard";
+import QiratLogin from "./pages/QiratLogin";
+import DawaLogin from "./pages/DawaLogin";
+import CharityLogin from "./pages/CharityLogin";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
@@ -52,6 +55,9 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/news" element={<News />} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/qirat/login" element={<QiratLogin />} />
+            <Route path="/admin/dawa/login" element={<DawaLogin />} />
+            <Route path="/admin/charity/login" element={<CharityLogin />} />
             <Route path="/admin/unauthorized" element={<Unauthorized />} />
             <Route path="/admin/dashboard" element={
               <ProtectedRoute allowedRoles={['superadmin']}>

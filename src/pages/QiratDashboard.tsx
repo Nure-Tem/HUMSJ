@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, deleteDoc, doc, query, where } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Eye, Calendar, Trash2, Plus, FileText, BookOpen, Music } from "lucide-react";
+import { LogOut, Eye, Calendar, Trash2, Plus, FileText, BookOpen, Music, Baby, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,12 +20,23 @@ interface Post {
   timestamp?: any;
 }
 
+interface ChildRegistration {
+  id: string;
+  childName?: string;
+  fullName?: string;
+  phone?: string;
+  email?: string;
+  timestamp?: any;
+  [key: string]: any;
+}
+
 const QiratDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [childrenRegistrations, setChildrenRegistrations] = useState<ChildRegistration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedItem, setSelectedItem] = useState<Post | null>(null);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
 
   useEffect(() => {
     checkAuth();
@@ -34,7 +45,7 @@ const QiratDashboard = () => {
 
   const checkAuth = () => {
     if (!auth.currentUser) {
-      navigate("/admin/login");
+      navigate("/admin/qirat/login");
     }
   };
 
@@ -50,7 +61,15 @@ const QiratDashboard = () => {
           post.category?.toLowerCase().includes('recitation')
         );
 
+      // Fetch children registrations
+      const childrenSnapshot = await getDocs(collection(db, "childrenRegistrations"));
+      const childrenData = childrenSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as ChildRegistration));
+
       setPosts(postsData);
+      setChildrenRegistrations(childrenData);
     } catch (error: any) {
       console.error("Error fetching Qirat content:", error);
       toast({
@@ -67,13 +86,13 @@ const QiratDashboard = () => {
     try {
       await auth.signOut();
       toast({ title: "Logged Out", description: "You have been successfully logged out" });
-      navigate("/admin/login");
+      navigate("/admin/qirat/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeletePost = async (id: string) => {
     if (!confirm("Are you sure you want to delete this post?")) return;
     try {
       await deleteDoc(doc(db, "posts", id));
@@ -82,6 +101,18 @@ const QiratDashboard = () => {
       setSelectedItem(null);
     } catch (error) {
       toast({ title: "Error", description: "Failed to delete post", variant: "destructive" });
+    }
+  };
+
+  const handleDeleteChild = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this registration?")) return;
+    try {
+      await deleteDoc(doc(db, "childrenRegistrations", id));
+      toast({ title: "Deleted", description: "Registration deleted successfully" });
+      fetchQiratContent();
+      setSelectedItem(null);
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to delete", variant: "destructive" });
     }
   };
 
@@ -126,10 +157,50 @@ const QiratDashboard = () => {
             </div>
           </div>
           <div className="flex gap-2 ml-4">
-            <Button size="sm" variant="outline" onClick={() => setSelectedItem(item)}>
+            <Button size="sm" variant="outline" onClick={() => setSelectedItem({ ...item, itemType: 'post' })}>
               <Eye className="h-4 w-4" />
             </Button>
-            <Button size="sm" variant="destructive" onClick={() => handleDelete(item.id)}>
+            <Button size="sm" variant="destructive" onClick={() => handleDeletePost(item.id)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const ChildCard = ({ item }: { item: ChildRegistration }) => (
+    <Card className="mb-4 hover:shadow-lg transition-shadow">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg mb-2">{item.childName || item.fullName || "N/A"}</h3>
+            <div className="space-y-1 text-sm text-gray-600">
+              {item.phone && (
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span>{item.phone}</span>
+                </div>
+              )}
+              {item.email && (
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  <span>{item.email}</span>
+                </div>
+              )}
+              {item.timestamp && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span>{formatDate(item.timestamp)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => setSelectedItem({ ...item, itemType: 'child' })}>
+              <Eye className="h-4 w-4" />
+            </Button>
+            <Button size="sm" variant="destructive" onClick={() => handleDeleteChild(item.id)}>
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -139,45 +210,67 @@ const QiratDashboard = () => {
   );
 
 
-  const DetailModal = ({ item, onClose }: { item: Post; onClose: () => void }) => (
+  const DetailModal = ({ item, onClose }: { item: any; onClose: () => void }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <CardHeader>
-          <CardTitle className="text-emerald-700">Qirat Content Details</CardTitle>
+          <CardTitle className="text-emerald-700">
+            {item.itemType === 'post' ? 'Qirat Content Details' : 'Child Registration Details'}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          {item.imageUrl && (
-            <img src={item.imageUrl} alt={item.title} className="w-full h-auto rounded-lg mb-4" />
-          )}
-          {item.videoUrl && (
-            <video src={item.videoUrl} className="w-full rounded-lg mb-4" controls />
-          )}
-          {item.audioUrl && (
-            <div className="mb-4 p-4 bg-emerald-50 rounded-lg">
-              <p className="font-semibold mb-2 text-emerald-700">Audio Recitation:</p>
-              <audio controls className="w-full">
-                <source src={item.audioUrl} type="audio/mpeg" />
-              </audio>
+          {item.itemType === 'post' ? (
+            <>
+              {item.imageUrl && (
+                <img src={item.imageUrl} alt={item.title} className="w-full h-auto rounded-lg mb-4" />
+              )}
+              {item.videoUrl && (
+                <video src={item.videoUrl} className="w-full rounded-lg mb-4" controls />
+              )}
+              {item.audioUrl && (
+                <div className="mb-4 p-4 bg-emerald-50 rounded-lg">
+                  <p className="font-semibold mb-2 text-emerald-700">Audio Recitation:</p>
+                  <audio controls className="w-full">
+                    <source src={item.audioUrl} type="audio/mpeg" />
+                  </audio>
+                </div>
+              )}
+              <div className="space-y-3">
+                <div className="border-b pb-2">
+                  <span className="font-semibold">Title: </span>
+                  <span className="text-gray-700">{item.title}</span>
+                </div>
+                <div className="border-b pb-2">
+                  <span className="font-semibold">Category: </span>
+                  <span className="text-gray-700">{item.category}</span>
+                </div>
+                <div className="border-b pb-2">
+                  <span className="font-semibold">Content: </span>
+                  <p className="text-gray-700 mt-1">{item.content}</p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="space-y-3">
+              {item.documentUrl && (
+                <div className="mb-4">
+                  <p className="font-semibold mb-2">Uploaded Document:</p>
+                  <img src={item.documentUrl} alt="Document" className="max-w-full h-auto rounded-lg border" />
+                </div>
+              )}
+              {Object.entries(item).map(([key, value]) => {
+                if (key === "id" || key === "itemType" || key === "documentUrl") return null;
+                return (
+                  <div key={key} className="border-b pb-2">
+                    <span className="font-semibold capitalize">{key.replace(/([A-Z])/g, " $1")}: </span>
+                    <span className="text-gray-700">
+                      {key === "timestamp" ? formatDate(value) : String(value)}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           )}
-          <div className="space-y-3">
-            <div className="border-b pb-2">
-              <span className="font-semibold">Title: </span>
-              <span className="text-gray-700">{item.title}</span>
-            </div>
-            <div className="border-b pb-2">
-              <span className="font-semibold">Category: </span>
-              <span className="text-gray-700">{item.category}</span>
-            </div>
-            <div className="border-b pb-2">
-              <span className="font-semibold">Content: </span>
-              <p className="text-gray-700 mt-1">{item.content}</p>
-            </div>
-            <div className="border-b pb-2">
-              <span className="font-semibold">Created: </span>
-              <span className="text-gray-700">{formatDate(item.timestamp)}</span>
-            </div>
-          </div>
           <Button onClick={onClose} className="mt-4 w-full bg-emerald-600 hover:bg-emerald-700">
             Close
           </Button>
@@ -230,7 +323,7 @@ const QiratDashboard = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card className="border-l-4 border-l-emerald-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Recitations</CardTitle>
@@ -262,30 +355,66 @@ const QiratDashboard = () => {
               </div>
             </CardContent>
           </Card>
+          <Card className="border-l-4 border-l-emerald-500">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Children Registered</CardTitle>
+              <Baby className="h-4 w-4 text-emerald-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-emerald-700">{childrenRegistrations.length}</div>
+            </CardContent>
+          </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-emerald-700">Qirat Content</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {posts.length === 0 ? (
-              <div className="text-center py-12">
-                <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 mb-4">No Qirat content yet</p>
-                <Button 
-                  onClick={() => navigate("/admin/create-post")}
-                  className="bg-emerald-600 hover:bg-emerald-700"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add First Recitation
-                </Button>
-              </div>
-            ) : (
-              posts.map(item => <PostCard key={item.id} item={item} />)
-            )}
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="recitations" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="recitations">Qirat Content</TabsTrigger>
+            <TabsTrigger value="children">Children Registrations</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="recitations" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-emerald-700">Qirat Content</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {posts.length === 0 ? (
+                  <div className="text-center py-12">
+                    <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 mb-4">No Qirat content yet</p>
+                    <Button 
+                      onClick={() => navigate("/admin/create-post")}
+                      className="bg-emerald-600 hover:bg-emerald-700"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add First Recitation
+                    </Button>
+                  </div>
+                ) : (
+                  posts.map(item => <PostCard key={item.id} item={item} />)
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="children" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-emerald-700">Children Registrations (Quran Learning)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {childrenRegistrations.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Baby className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">No children registrations yet</p>
+                  </div>
+                ) : (
+                  childrenRegistrations.map(item => <ChildCard key={item.id} item={item} />)
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {selectedItem && <DetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />}

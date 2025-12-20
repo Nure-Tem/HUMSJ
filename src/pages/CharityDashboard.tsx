@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Eye, Calendar, Trash2, Phone, Mail, Users, Baby, Heart, Gift, HandHeart } from "lucide-react";
+import { LogOut, Eye, Calendar, Trash2, Phone, Mail, Users, Heart, Gift, HandHeart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +19,6 @@ const CharityDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [helpRequests, setHelpRequests] = useState<Submission[]>([]);
-  const [childrenRegistrations, setChildrenRegistrations] = useState<Submission[]>([]);
   const [monthlyCharity, setMonthlyCharity] = useState<Submission[]>([]);
   const [charityDistribution, setCharityDistribution] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +31,7 @@ const CharityDashboard = () => {
 
   const checkAuth = () => {
     if (!auth.currentUser) {
-      navigate("/admin/login");
+      navigate("/admin/charity/login");
     }
   };
 
@@ -43,14 +42,6 @@ const CharityDashboard = () => {
       const helpData = helpSnapshot.docs.map(doc => ({
         id: doc.id,
         type: "help",
-        ...doc.data()
-      }));
-
-      // Fetch children registrations
-      const childrenSnapshot = await getDocs(collection(db, "childrenRegistrations"));
-      const childrenData = childrenSnapshot.docs.map(doc => ({
-        id: doc.id,
-        type: "children",
         ...doc.data()
       }));
 
@@ -71,7 +62,6 @@ const CharityDashboard = () => {
       }));
 
       setHelpRequests(helpData);
-      setChildrenRegistrations(childrenData);
       setMonthlyCharity(monthlyData);
       setCharityDistribution(distributionData);
     } catch (error: any) {
@@ -90,7 +80,7 @@ const CharityDashboard = () => {
     try {
       await auth.signOut();
       toast({ title: "Logged Out", description: "You have been successfully logged out" });
-      navigate("/admin/login");
+      navigate("/admin/charity/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -117,7 +107,6 @@ const CharityDashboard = () => {
   const getCollectionName = (type: string) => {
     switch (type) {
       case "help": return "helpRegistrations";
-      case "children": return "childrenRegistrations";
       case "monthly": return "monthlyCharityRegistrations";
       case "distribution": return "charityDistributions";
       default: return "";
@@ -130,7 +119,7 @@ const CharityDashboard = () => {
         <div className="flex justify-between items-start">
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-2">
-              {item.fullName || item.name || item.childName || "N/A"}
+              {item.fullName || item.name || "N/A"}
             </h3>
             <div className="space-y-1 text-sm text-gray-600">
               {item.phone && (
@@ -169,7 +158,6 @@ const CharityDashboard = () => {
       </CardContent>
     </Card>
   );
-
 
   const DetailModal = ({ item, onClose }: { item: Submission; onClose: () => void }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -228,7 +216,7 @@ const CharityDashboard = () => {
     );
   }
 
-  const totalSubmissions = helpRequests.length + childrenRegistrations.length + monthlyCharity.length + charityDistribution.length;
+  const totalSubmissions = helpRequests.length + monthlyCharity.length + charityDistribution.length;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -248,7 +236,7 @@ const CharityDashboard = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="border-l-4 border-l-amber-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Help Requests</CardTitle>
@@ -256,15 +244,6 @@ const CharityDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-amber-700">{helpRequests.length}</div>
-            </CardContent>
-          </Card>
-          <Card className="border-l-4 border-l-amber-500">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Children</CardTitle>
-              <Baby className="h-4 w-4 text-amber-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-amber-700">{childrenRegistrations.length}</div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-amber-500">
@@ -297,9 +276,8 @@ const CharityDashboard = () => {
         </div>
 
         <Tabs defaultValue="help" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="help">Help Requests</TabsTrigger>
-            <TabsTrigger value="children">Children</TabsTrigger>
             <TabsTrigger value="monthly">Monthly Donors</TabsTrigger>
             <TabsTrigger value="distribution">Distributions</TabsTrigger>
           </TabsList>
@@ -317,24 +295,6 @@ const CharityDashboard = () => {
                   </div>
                 ) : (
                   helpRequests.map(item => <SubmissionCard key={item.id} item={item} />)
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="children" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-amber-700">Children Registrations</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {childrenRegistrations.length === 0 ? (
-                  <div className="text-center py-12">
-                    <Baby className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500">No children registrations yet</p>
-                  </div>
-                ) : (
-                  childrenRegistrations.map(item => <SubmissionCard key={item.id} item={item} />)
                 )}
               </CardContent>
             </Card>
