@@ -26,7 +26,7 @@ export const useAuth = () => {
           // Fetch user role from Firestore
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           const userData = userDoc.data();
-          const role = (userData?.role as UserRole) || 'charity'; // Default to charity if no role
+          const role = (userData?.role as UserRole) || 'superadmin'; // Default to superadmin if no role document exists
 
           setAuthState({
             user,
