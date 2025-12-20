@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Eye, Calendar, Trash2, Plus, FileText, MessageSquare, Users, Mail, Phone, Megaphone } from "lucide-react";
+import { LogOut, Eye, Calendar, Trash2, Plus, FileText, MessageSquare, Users, Mail, Phone, Megaphone, Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -289,6 +289,14 @@ const DawaDashboard = () => {
             >
               <FileText className="h-4 w-4 mr-2" />
               Media Library
+            </Button>
+            <Button 
+              onClick={() => navigate("/admin/dawa/settings")}
+              variant="outline"
+              className="border-white text-white hover:bg-blue-500"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
             </Button>
             <Button onClick={handleLogout} variant="outline" className="border-white text-white hover:bg-blue-500">
               <LogOut className="h-4 w-4 mr-2" />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare, FileText, Plus, BookOpen, Megaphone, HandHeart } from "lucide-react";
+import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare, FileText, Plus, BookOpen, Megaphone, HandHeart, Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -401,6 +401,13 @@ const AdminDashboard = () => {
             >
               <FileText className="h-4 w-4 mr-2" />
               Media Library
+            </Button>
+            <Button 
+              onClick={() => navigate("/admin/settings")}
+              variant="outline"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
             </Button>
             <Button onClick={handleLogout} variant="outline">
               <LogOut className="h-4 w-4 mr-2" />

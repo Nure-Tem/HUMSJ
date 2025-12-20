@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Eye, Calendar, Trash2, Phone, Mail, Users, Heart, Gift, HandHeart } from "lucide-react";
+import { LogOut, Eye, Calendar, Trash2, Phone, Mail, Users, Heart, Gift, HandHeart, Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -227,6 +227,14 @@ const CharityDashboard = () => {
             <h1 className="text-2xl font-bold text-white">Charity Department Dashboard</h1>
           </div>
           <div className="flex gap-3">
+            <Button 
+              onClick={() => navigate("/admin/charity/settings")}
+              variant="outline"
+              className="border-white text-white hover:bg-amber-500"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
             <Button onClick={handleLogout} variant="outline" className="border-white text-white hover:bg-amber-500">
               <LogOut className="h-4 w-4 mr-2" />
               Logout

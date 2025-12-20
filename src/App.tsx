@@ -28,6 +28,10 @@ import CharityDashboard from "./pages/CharityDashboard";
 import QiratLogin from "./pages/QiratLogin";
 import DawaLogin from "./pages/DawaLogin";
 import CharityLogin from "./pages/CharityLogin";
+import SuperAdminSettings from "./pages/SuperAdminSettings";
+import QiratSettings from "./pages/QiratSettings";
+import DawaSettings from "./pages/DawaSettings";
+import CharitySettings from "./pages/CharitySettings";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
@@ -92,6 +96,26 @@ const App = () => (
             <Route path="/admin/manage-news" element={
               <ProtectedRoute allowedRoles={['superadmin', 'qirat', 'dawa']}>
                 <ManageNews />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/settings" element={
+              <ProtectedRoute allowedRoles={['superadmin']}>
+                <SuperAdminSettings />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/qirat/settings" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'qirat']}>
+                <QiratSettings />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/dawa/settings" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'dawa']}>
+                <DawaSettings />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/charity/settings" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'charity']}>
+                <CharitySettings />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
