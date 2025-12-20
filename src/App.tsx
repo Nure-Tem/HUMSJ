@@ -22,6 +22,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CreatePost from "./pages/CreatePost";
 import MediaLibrary from "./pages/MediaLibrary";
 import ManageNews from "./pages/ManageNews";
+import QiratDashboard from "./pages/QiratDashboard";
+import DawaDashboard from "./pages/DawaDashboard";
+import CharityDashboard from "./pages/CharityDashboard";
+import Unauthorized from "./pages/Unauthorized";
+import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,10 +52,42 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/news" element={<News />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/create-post" element={<CreatePost />} />
-            <Route path="/admin/media-library" element={<MediaLibrary />} />
-            <Route path="/admin/manage-news" element={<ManageNews />} />
+            <Route path="/admin/unauthorized" element={<Unauthorized />} />
+            <Route path="/admin/dashboard" element={
+              <ProtectedRoute allowedRoles={['superadmin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/qirat" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'qirat']}>
+                <QiratDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/dawa" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'dawa']}>
+                <DawaDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/charity" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'charity']}>
+                <CharityDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/create-post" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'qirat', 'dawa']}>
+                <CreatePost />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/media-library" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'qirat', 'dawa']}>
+                <MediaLibrary />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/manage-news" element={
+              <ProtectedRoute allowedRoles={['superadmin', 'qirat', 'dawa']}>
+                <ManageNews />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

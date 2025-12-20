@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { UserRole, roleDashboardRoutes, roleDisplayNames } from "@/lib/roles";
 import { Lock, Mail, Shield, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,17 +34,25 @@ const AdminLogin = () => {
 
     try {
       // Sign in with Firebase Auth
-      await signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
+      // Fetch user role from Firestore
+      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+      const userData = userDoc.data();
+      const role = (userData?.role as UserRole) || 'superadmin';
+      
+      // Get the appropriate dashboard route based on role
+      const dashboardRoute = roleDashboardRoutes[role];
+
       toast({
         title: "Login Successful",
-        description: "Welcome to the Admin Dashboard",
+        description: `Welcome to the ${roleDisplayNames[role]} Dashboard`,
       });
-      navigate("/admin/dashboard");
+      navigate(dashboardRoute);
     } catch (err: any) {
       let errorMessage = "Login failed. Please try again.";
       if (err.code === "auth/user-not-found") {

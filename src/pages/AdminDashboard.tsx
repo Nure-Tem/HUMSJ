@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare, FileText, Plus } from "lucide-react";
+import { LogOut, Users, Trash2, Eye, Calendar, Phone, Mail, Baby, Heart, Gift, MessageSquare, FileText, Plus, BookOpen, Megaphone, HandHeart } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -368,6 +368,27 @@ const AdminDashboard = () => {
           <h1 className="text-2xl font-bold heading-blue">HUMSJ Admin Dashboard</h1>
           <div className="flex gap-3">
             <Button 
+              onClick={() => navigate("/admin/qirat")}
+              className="bg-emerald-600 hover:bg-emerald-700"
+            >
+              <BookOpen className="h-4 w-4 mr-2" />
+              Qirat
+            </Button>
+            <Button 
+              onClick={() => navigate("/admin/dawa")}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Megaphone className="h-4 w-4 mr-2" />
+              Dawa
+            </Button>
+            <Button 
+              onClick={() => navigate("/admin/charity")}
+              className="bg-amber-600 hover:bg-amber-700"
+            >
+              <HandHeart className="h-4 w-4 mr-2" />
+              Charity
+            </Button>
+            <Button 
               onClick={() => navigate("/admin/create-post")}
               className="bg-green-600 hover:bg-green-700"
             >
@@ -376,17 +397,10 @@ const AdminDashboard = () => {
             </Button>
             <Button 
               onClick={() => navigate("/admin/media-library")}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              <FileText className="h-4 w-4 mr-2" />
-              Media Library
-            </Button>
-            <Button 
-              onClick={() => navigate("/admin/manage-news")}
               className="bg-purple-600 hover:bg-purple-700"
             >
               <FileText className="h-4 w-4 mr-2" />
-              Manage News
+              Media Library
             </Button>
             <Button onClick={handleLogout} variant="outline">
               <LogOut className="h-4 w-4 mr-2" />
