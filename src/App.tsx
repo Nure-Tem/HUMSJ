@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Programs from "./pages/Programs";
 import Donate from "./pages/Donate";
+import DonateNow from "./pages/DonateNow";
 import Contact from "./pages/Contact";
 import News from "./pages/News";
 import VisionMission from "./pages/VisionMission";
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/charity-distribution" element={<CharityDistribution />} />
             <Route path="/help-registration" element={<HelpRegistration />} />
             <Route path="/donate" element={<Donate />} />
+            <Route path="/donate-now" element={<DonateNow />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/news" element={<News />} />
             <Route path="/admin/login" element={<AdminLogin />} />

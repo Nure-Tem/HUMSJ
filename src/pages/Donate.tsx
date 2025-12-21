@@ -179,21 +179,18 @@ export default function Donate() {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-8 text-center shadow-card lg:p-12">
             <h2 className="mb-4 font-heading text-2xl font-bold heading-blue md:text-3xl">
-              Need Help with Your Donation?
+              Ready to Donate?
             </h2>
             <p className="mb-6 text-muted-foreground">
-              Our team is here to assist you. Contact us for any questions about donations, 
-              project-specific contributions, or to arrange in-person donations.
+              Make a donation now and track your contribution. Our team will verify your payment 
+              and credit it to your account.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button size="lg" asChild>
-                <Link to="/contact">Contact Us</Link>
+                <Link to="/donate-now">Donate Now</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="https://wa.me/251985736451" target="_blank" rel="noopener noreferrer">
-                  <Phone className="mr-2 h-4 w-4" />
-                  WhatsApp
-                </a>
+                <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           </div>
