@@ -67,22 +67,15 @@ export default function MonthlyCharityRegistration() {
       return;
     }
 
-    if (!receiptFile) {
-      toast({
-        title: "Receipt Required",
-        description: "Please upload your payment receipt",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
       let receiptUrl = "";
-      const fileRef = ref(storage, `monthly-charity-receipts/${Date.now()}-${receiptFile.name}`);
-      await uploadBytes(fileRef, receiptFile);
-      receiptUrl = await getDownloadURL(fileRef);
+      if (receiptFile) {
+        const fileRef = ref(storage, `monthly-charity-receipts/${Date.now()}-${receiptFile.name}`);
+        await uploadBytes(fileRef, receiptFile);
+        receiptUrl = await getDownloadURL(fileRef);
+      }
 
       await addDoc(collection(db, "monthlyCharityRegistrations"), {
         ...formData,
@@ -317,18 +310,16 @@ export default function MonthlyCharityRegistration() {
                   </h3>
 
                   <div className="space-y-2">
-                    <Label className="text-foreground">Upload Payment Receipt *</Label>
+                    <Label className="text-foreground">Upload Payment Receipt (Optional)</Label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="file"
                         accept="image/*"
                         onChange={handleFileChange}
                         className="input-dark"
-                        required
                       />
                       {receiptFile && <CheckCircle className="h-5 w-5 text-green-500" />}
                     </div>
-                    <p className="text-xs text-muted-foreground">Upload screenshot or photo of your payment receipt</p>
                   </div>
                   
                   <div className="space-y-2">
