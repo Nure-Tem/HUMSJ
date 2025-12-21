@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, CreditCard, Phone, User, Building, Calendar, FileText } from "lucide-react";
+import { Heart, CreditCard, Phone, User, Building, Calendar, FileText, Upload, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { z } from "zod";
 
 const registrationSchema = z.object({
@@ -34,6 +35,7 @@ export default function MonthlyCharityRegistration() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     idNumber: "",
@@ -45,6 +47,12 @@ export default function MonthlyCharityRegistration() {
     startMonth: "",
     notes: "",
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setReceiptFile(e.target.files[0]);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,11 +67,26 @@ export default function MonthlyCharityRegistration() {
       return;
     }
 
+    if (!receiptFile) {
+      toast({
+        title: "Receipt Required",
+        description: "Please upload your payment receipt",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      let receiptUrl = "";
+      const fileRef = ref(storage, `monthly-charity-receipts/${Date.now()}-${receiptFile.name}`);
+      await uploadBytes(fileRef, receiptFile);
+      receiptUrl = await getDownloadURL(fileRef);
+
       await addDoc(collection(db, "monthlyCharityRegistrations"), {
         ...formData,
+        receiptUrl,
         timestamp: serverTimestamp(),
       });
 
@@ -102,6 +125,7 @@ export default function MonthlyCharityRegistration() {
               <Button 
                 onClick={() => {
                   setIsSuccess(false);
+                  setReceiptFile(null);
                   setFormData({
                     fullName: "",
                     idNumber: "",
@@ -289,8 +313,23 @@ export default function MonthlyCharityRegistration() {
                 <div className="space-y-4">
                   <h3 className="font-heading text-lg font-semibold text-primary flex items-center gap-2">
                     <FileText className="h-5 w-5" />
-                    Additional Notes
+                    Payment Receipt & Notes
                   </h3>
+
+                  <div className="space-y-2">
+                    <Label className="text-foreground">Upload Payment Receipt *</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="input-dark"
+                        required
+                      />
+                      {receiptFile && <CheckCircle className="h-5 w-5 text-green-500" />}
+                    </div>
+                    <p className="text-xs text-muted-foreground">Upload screenshot or photo of your payment receipt</p>
+                  </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="notes" className="text-foreground">Notes (Optional)</Label>

@@ -54,6 +54,10 @@ export default function DonateNow() {
       toast({ title: "Missing Information", description: "Please fill in all required fields", variant: "destructive" });
       return;
     }
+    if (!receiptFile) {
+      toast({ title: "Receipt Required", description: "Please upload your payment receipt", variant: "destructive" });
+      return;
+    }
     setIsSubmitting(true);
     try {
       let receiptUrl = "";
@@ -211,11 +215,12 @@ export default function DonateNow() {
                   <p className="text-xs text-muted-foreground">This helps us verify your payment</p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Upload Receipt (Optional)</Label>
+                  <Label>Upload Receipt *</Label>
                   <div className="flex items-center gap-2">
-                    <Input type="file" accept="image/*" onChange={handleFileChange} className="input-dark" />
+                    <Input type="file" accept="image/*" onChange={handleFileChange} className="input-dark" required />
                     {receiptFile && <CheckCircle className="h-5 w-5 text-green-500" />}
                   </div>
+                  <p className="text-xs text-muted-foreground">Upload screenshot or photo of your payment receipt</p>
                 </div>
                 <div className="space-y-2"><Label>Notes (Optional)</Label><Textarea placeholder="Any additional notes..." value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} className="input-dark resize-none" rows={3} /></div>
                 <div className="flex gap-3 pt-2">
