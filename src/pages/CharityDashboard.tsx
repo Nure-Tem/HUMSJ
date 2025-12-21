@@ -35,16 +35,37 @@ interface Donation {
   verifiedBy?: string;
 }
 
+interface MonthlyCharity {
+  id: string;
+  fullName: string;
+  phone: string;
+  email?: string;
+  idNumber?: string;
+  department: string;
+  year: string;
+  amount: number;
+  paymentMethod: string;
+  startMonth: string;
+  transactionRef: string;
+  receiptUrl?: string;
+  status: "pending" | "verified" | "rejected";
+  notes?: string;
+  timestamp?: any;
+  verifiedAt?: any;
+  verifiedBy?: string;
+}
+
 const CharityDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [helpRequests, setHelpRequests] = useState<Submission[]>([]);
-  const [monthlyCharity, setMonthlyCharity] = useState<Submission[]>([]);
+  const [monthlyCharity, setMonthlyCharity] = useState<MonthlyCharity[]>([]);
   const [charityDistribution, setCharityDistribution] = useState<Submission[]>([]);
   const [donations, setDonations] = useState<Donation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<Submission | null>(null);
   const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
+  const [selectedMonthly, setSelectedMonthly] = useState<MonthlyCharity | null>(null);
   const [replyItem, setReplyItem] = useState<Submission | null>(null);
 
   useEffect(() => {
@@ -64,7 +85,7 @@ const CharityDashboard = () => {
       const helpData = helpSnapshot.docs.map(doc => ({ id: doc.id, type: "help", ...doc.data() }));
 
       const monthlySnapshot = await getDocs(collection(db, "monthlyCharityRegistrations"));
-      const monthlyData = monthlySnapshot.docs.map(doc => ({ id: doc.id, type: "monthly", ...doc.data() }));
+      const monthlyData = monthlySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as MonthlyCharity[];
 
       const distributionSnapshot = await getDocs(collection(db, "charityDistributions"));
       const distributionData = distributionSnapshot.docs.map(doc => ({ id: doc.id, type: "distribution", ...doc.data() }));
@@ -157,6 +178,28 @@ const CharityDashboard = () => {
   const pendingDonations = donations.filter(d => d.status === "pending");
   const verifiedDonations = donations.filter(d => d.status === "verified");
   const totalVerifiedAmount = verifiedDonations.reduce((sum, d) => sum + (d.amount || 0), 0);
+
+  const pendingMonthly = monthlyCharity.filter(m => m.status === "pending");
+  const verifiedMonthly = monthlyCharity.filter(m => m.status === "verified");
+  const totalMonthlyAmount = verifiedMonthly.reduce((sum, m) => sum + (m.amount || 0), 0);
+
+  const handleVerifyMonthly = async (id: string, newStatus: "verified" | "rejected") => {
+    try {
+      await updateDoc(doc(db, "monthlyCharityRegistrations", id), {
+        status: newStatus,
+        verifiedAt: new Date(),
+        verifiedBy: auth.currentUser?.email || "Admin",
+      });
+      toast({ 
+        title: newStatus === "verified" ? "Monthly Charity Verified" : "Monthly Charity Rejected", 
+        description: `Subscription has been ${newStatus}` 
+      });
+      fetchCharityData();
+      setSelectedMonthly(null);
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+    }
+  };
 
   const SubmissionCard = ({ item }: { item: Submission }) => (
     <Card className="mb-4 hover:shadow-lg transition-shadow">
@@ -255,6 +298,60 @@ const CharityDashboard = () => {
                   <CheckCircle className="h-4 w-4" />
                 </Button>
                 <Button size="sm" variant="destructive" onClick={() => handleVerifyDonation(donation.id, "rejected")}>
+                  <XCircle className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const MonthlyCharityCard = ({ item }: { item: MonthlyCharity }) => (
+    <Card className="mb-4 hover:shadow-lg transition-shadow">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <h3 className="font-semibold text-lg">{item.fullName}</h3>
+              <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
+                item.status === "verified" ? "bg-green-100 text-green-700" :
+                item.status === "rejected" ? "bg-red-100 text-red-700" :
+                "bg-yellow-100 text-yellow-700"
+              }`}>
+                {item.status === "verified" ? <CheckCircle className="h-3 w-3" /> :
+                 item.status === "rejected" ? <XCircle className="h-3 w-3" /> :
+                 <Clock className="h-3 w-3" />}
+                {(item.status || "pending").charAt(0).toUpperCase() + (item.status || "pending").slice(1)}
+              </span>
+            </div>
+            <div className="space-y-1 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                <span className="font-semibold text-amber-600">{item.amount} ETB/month</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4" /><span>{item.phone}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" /><span>Start: {item.startMonth}</span>
+              </div>
+              <p className="text-xs text-gray-500">
+                {item.department} | {item.year} | Via: {getPaymentMethodName(item.paymentMethod)}
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => setSelectedMonthly(item)}>
+              <Eye className="h-4 w-4" />
+            </Button>
+            {(item.status === "pending" || !item.status) && (
+              <>
+                <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleVerifyMonthly(item.id, "verified")}>
+                  <CheckCircle className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="destructive" onClick={() => handleVerifyMonthly(item.id, "rejected")}>
                   <XCircle className="h-4 w-4" />
                 </Button>
               </>
@@ -406,6 +503,66 @@ const CharityDashboard = () => {
     </div>
   );
 
+  const MonthlyCharityDetailModal = ({ item, onClose }: { item: MonthlyCharity; onClose: () => void }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <CardHeader>
+          <CardTitle className="text-amber-700">Monthly Charity Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {item.receiptUrl && (
+            <div className="mb-4">
+              <p className="font-semibold mb-2">Payment Receipt:</p>
+              <img src={item.receiptUrl} alt="Receipt" className="max-w-full h-auto rounded-lg border" />
+            </div>
+          )}
+          
+          <div className="space-y-3">
+            <div className="p-4 bg-amber-50 rounded-lg text-center">
+              <p className="text-sm text-gray-600">Monthly Amount</p>
+              <p className="text-3xl font-bold text-amber-700">{item.amount} ETB</p>
+            </div>
+            
+            <div className="border-b pb-2"><span className="font-semibold">Full Name: </span><span className="text-gray-700">{item.fullName}</span></div>
+            <div className="border-b pb-2"><span className="font-semibold">Phone: </span><span className="text-gray-700">{item.phone}</span></div>
+            {item.email && <div className="border-b pb-2"><span className="font-semibold">Email: </span><span className="text-gray-700">{item.email}</span></div>}
+            {item.idNumber && <div className="border-b pb-2"><span className="font-semibold">Student ID: </span><span className="text-gray-700">{item.idNumber}</span></div>}
+            <div className="border-b pb-2"><span className="font-semibold">Department: </span><span className="text-gray-700">{item.department}</span></div>
+            <div className="border-b pb-2"><span className="font-semibold">Year: </span><span className="text-gray-700">{item.year}</span></div>
+            <div className="border-b pb-2"><span className="font-semibold">Start Month: </span><span className="text-gray-700">{item.startMonth}</span></div>
+            <div className="border-b pb-2"><span className="font-semibold">Payment Method: </span><span className="text-gray-700">{getPaymentMethodName(item.paymentMethod)}</span></div>
+            <div className="border-b pb-2"><span className="font-semibold">Transaction Ref: </span><span className="text-gray-700 font-mono">{item.transactionRef}</span></div>
+            <div className="border-b pb-2">
+              <span className="font-semibold">Status: </span>
+              <span className={`px-2 py-1 rounded text-sm ${
+                item.status === "verified" ? "bg-green-100 text-green-700" :
+                item.status === "rejected" ? "bg-red-100 text-red-700" :
+                "bg-yellow-100 text-yellow-700"
+              }`}>{item.status || "pending"}</span>
+            </div>
+            <div className="border-b pb-2"><span className="font-semibold">Submitted: </span><span className="text-gray-700">{formatDate(item.timestamp)}</span></div>
+            {item.notes && <div className="border-b pb-2"><span className="font-semibold">Notes: </span><span className="text-gray-700">{item.notes}</span></div>}
+            {item.verifiedBy && <div className="border-b pb-2"><span className="font-semibold">Verified By: </span><span className="text-gray-700">{item.verifiedBy} on {formatDate(item.verifiedAt)}</span></div>}
+          </div>
+
+          <div className="flex gap-3 mt-4">
+            {(item.status === "pending" || !item.status) && (
+              <>
+                <Button onClick={() => handleVerifyMonthly(item.id, "verified")} className="flex-1 bg-green-600 hover:bg-green-700">
+                  <CheckCircle className="h-4 w-4 mr-2" /> Verify
+                </Button>
+                <Button onClick={() => handleVerifyMonthly(item.id, "rejected")} variant="destructive" className="flex-1">
+                  <XCircle className="h-4 w-4 mr-2" /> Reject
+                </Button>
+              </>
+            )}
+            <Button onClick={onClose} variant="outline" className="flex-1">Close</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -461,10 +618,10 @@ const CharityDashboard = () => {
           </Card>
           <Card className="border-l-4 border-l-amber-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Monthly Donors</CardTitle>
+              <CardTitle className="text-sm font-medium">Pending Monthly</CardTitle>
               <Heart className="h-4 w-4 text-amber-600" />
             </CardHeader>
-            <CardContent><div className="text-2xl font-bold text-amber-700">{monthlyCharity.length}</div></CardContent>
+            <CardContent><div className="text-2xl font-bold text-amber-700">{pendingMonthly.length}</div></CardContent>
           </Card>
           <Card className="border-l-4 border-l-amber-500">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -479,7 +636,7 @@ const CharityDashboard = () => {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="donations">Donations {pendingDonations.length > 0 && `(${pendingDonations.length})`}</TabsTrigger>
             <TabsTrigger value="help">Help Requests</TabsTrigger>
-            <TabsTrigger value="monthly">Monthly Donors</TabsTrigger>
+            <TabsTrigger value="monthly">Monthly {pendingMonthly.length > 0 && `(${pendingMonthly.length})`}</TabsTrigger>
             <TabsTrigger value="distribution">Distributions</TabsTrigger>
           </TabsList>
 
@@ -526,11 +683,30 @@ const CharityDashboard = () => {
 
           <TabsContent value="monthly" className="mt-6">
             <Card>
-              <CardHeader><CardTitle className="text-amber-700">Monthly Charity Donors</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-amber-700">Monthly Charity Subscriptions</CardTitle></CardHeader>
               <CardContent>
                 {monthlyCharity.length === 0 ? (
-                  <div className="text-center py-12"><Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-500">No monthly donors yet</p></div>
-                ) : monthlyCharity.map(item => <SubmissionCard key={item.id} item={item} />)}
+                  <div className="text-center py-12"><Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-500">No monthly subscriptions yet</p></div>
+                ) : (
+                  <>
+                    {pendingMonthly.length > 0 && (
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-yellow-700 mb-3 flex items-center gap-2">
+                          <Clock className="h-5 w-5" /> Pending Verification ({pendingMonthly.length})
+                        </h3>
+                        {pendingMonthly.map(item => <MonthlyCharityCard key={item.id} item={item} />)}
+                      </div>
+                    )}
+                    {verifiedMonthly.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-green-700 mb-3 flex items-center gap-2">
+                          <CheckCircle className="h-5 w-5" /> Verified Subscriptions ({verifiedMonthly.length}) - {totalMonthlyAmount.toLocaleString()} ETB/month
+                        </h3>
+                        {verifiedMonthly.map(item => <MonthlyCharityCard key={item.id} item={item} />)}
+                      </div>
+                    )}
+                  </>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -551,6 +727,8 @@ const CharityDashboard = () => {
       {selectedItem && <DetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
       
       {selectedDonation && <DonationDetailModal donation={selectedDonation} onClose={() => setSelectedDonation(null)} />}
+      
+      {selectedMonthly && <MonthlyCharityDetailModal item={selectedMonthly} onClose={() => setSelectedMonthly(null)} />}
       
       {replyItem && (
         <ReplyModal
