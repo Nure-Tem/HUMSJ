@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Lock, Mail, Megaphone, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -15,6 +15,9 @@ const DawaLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetSent, setResetSent] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,6 +27,20 @@ const DawaLogin = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setError("");
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetEmail) { setError("Please enter your email address"); return; }
+    setIsLoading(true);
+    setError("");
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      setResetSent(true);
+      toast({ title: "Reset Email Sent", description: "Check your email for password reset instructions" });
+    } catch (err: any) {
+      setError(err.code === "auth/user-not-found" ? "No account found with this email." : err.code === "auth/invalid-email" ? "Invalid email address." : "Failed to send reset email.");
+    } finally { setIsLoading(false); }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -135,9 +152,41 @@ const DawaLogin = () => {
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
+            <div className="text-center">
+              <button type="button" onClick={() => setShowForgotPassword(true)} className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                Forgot your password?
+              </button>
+            </div>
           </form>
         </CardContent>
       </Card>
+      {showForgotPassword && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader><CardTitle className="text-blue-700">Reset Password</CardTitle><CardDescription>Enter your email to receive a password reset link</CardDescription></CardHeader>
+            <CardContent>
+              {resetSent ? (
+                <div className="text-center space-y-4">
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-md text-green-700">Password reset email sent! Check your inbox.</div>
+                  <Button onClick={() => { setShowForgotPassword(false); setResetSent(false); setResetEmail(""); }} variant="outline" className="w-full">Back to Login</Button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  {error && <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm"><AlertCircle className="h-4 w-4" /><span>{error}</span></div>}
+                  <div className="space-y-2">
+                    <Label htmlFor="resetEmail">Email Address</Label>
+                    <div className="relative"><Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" /><Input id="resetEmail" type="email" placeholder="your@email.com" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} className="pl-10" required /></div>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button type="button" variant="outline" onClick={() => { setShowForgotPassword(false); setError(""); }} className="flex-1">Cancel</Button>
+                    <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" disabled={isLoading}>{isLoading ? "Sending..." : "Send Reset Link"}</Button>
+                  </div>
+                </form>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
