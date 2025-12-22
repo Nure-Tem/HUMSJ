@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { ArrowLeft, Mail, Lock, Save, AlertCircle, CheckCircle } from "lucide-react";
+import { ArrowLeft, Mail, Lock, Save, AlertCircle, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +30,13 @@ const AccountSettings = ({ returnPath = "/admin/dashboard", themeColor = 'purple
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+  });
+
+  const [showPasswords, setShowPasswords] = useState({
+    emailCurrent: false,
+    current: false,
+    new: false,
+    confirm: false,
   });
 
   const user = auth.currentUser;
@@ -226,13 +233,20 @@ const AccountSettings = ({ returnPath = "/admin/dashboard", themeColor = 'purple
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="emailCurrentPassword"
-                      type="password"
+                      type={showPasswords.emailCurrent ? "text" : "password"}
                       placeholder="••••••••"
                       value={emailForm.currentPassword}
                       onChange={(e) => setEmailForm({ ...emailForm, currentPassword: e.target.value })}
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({ ...showPasswords, emailCurrent: !showPasswords.emailCurrent })}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPasswords.emailCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <Button type="submit" className={colors.bg} disabled={isLoading}>
@@ -257,13 +271,20 @@ const AccountSettings = ({ returnPath = "/admin/dashboard", themeColor = 'purple
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="currentPassword"
-                      type="password"
+                      type={showPasswords.current ? "text" : "password"}
                       placeholder="••••••••"
                       value={passwordForm.currentPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPasswords.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -272,14 +293,21 @@ const AccountSettings = ({ returnPath = "/admin/dashboard", themeColor = 'purple
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="newPassword"
-                      type="password"
+                      type={showPasswords.new ? "text" : "password"}
                       placeholder="••••••••"
                       value={passwordForm.newPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                       minLength={6}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPasswords.new ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -288,14 +316,21 @@ const AccountSettings = ({ returnPath = "/admin/dashboard", themeColor = 'purple
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="confirmPassword"
-                      type="password"
+                      type={showPasswords.confirm ? "text" : "password"}
                       placeholder="••••••••"
                       value={passwordForm.confirmPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                       minLength={6}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPasswords.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <Button type="submit" className={colors.bg} disabled={isLoading}>
