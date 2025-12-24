@@ -1,4 +1,4 @@
-import { Users, Target, Heart, Award } from "lucide-react";
+import { Users, Target, Heart, Award, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import patternBg from "@/assets/pattern-bg.jpg";
 import ustMusab from "@/assets/ust-musab.jpg";
@@ -30,19 +30,40 @@ const values = [
 
 const team = [
   {
-    name: "Ust. Mus'ab",
+    name: "Ust. Mus'ab Abdurahman",
     role: "General Amir",
+    phone: "+251925237453",
     image: ustMusab,
   },
   {
-    name: "Ust. Yusuf",
+    name: "Ust. Yusuf Usman",
     role: "Vice Amir",
+    phone: "+251949298089",
     image: ustYusuf,
   },
   {
-    name: "Ust. Mahdi",
-    role: "External Affairs Head",
+    name: "Ust. Mahdi Jemal",
+    role: "External Affairs Amir",
+    phone: "0938979492",
     image: ustMahdi,
+  },
+];
+
+const subsectorLeaders = [
+  {
+    name: "Mohammed Ahmadu",
+    role: "Qirat Sector Amir",
+    phone: "+251929230120",
+  },
+  {
+    name: "Muhajir Mohammed",
+    role: "Charity Sector Amir",
+    phone: "+251964544620",
+  },
+  {
+    name: "Ramadan Aliyii",
+    role: "Dawa Sector Amir",
+    phone: "+251975309779",
   },
 ];
 
@@ -168,7 +189,8 @@ export default function About() {
             </p>
           </div>
           
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
+          {/* Main Leadership */}
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto mb-16">
             {team.map((member, index) => (
               <div 
                 key={member.name}
@@ -186,8 +208,48 @@ export default function About() {
                   {member.name}
                 </h3>
                 <p className="text-sm text-muted-foreground">{member.role}</p>
+                {member.phone && (
+                  <a 
+                    href={`tel:${member.phone}`}
+                    className="inline-flex items-center gap-1 mt-2 text-sm text-primary hover:underline"
+                  >
+                    <Phone className="h-3 w-3" />
+                    {member.phone}
+                  </a>
+                )}
               </div>
             ))}
+          </div>
+
+          {/* Subsector Leaders */}
+          <div className="max-w-4xl mx-auto">
+            <h3 className="mb-8 text-center font-heading text-2xl font-bold heading-blue">
+              Subsector Leaders
+            </h3>
+            <div className="grid gap-6 sm:grid-cols-3">
+              {subsectorLeaders.map((leader, index) => (
+                <Card 
+                  key={leader.name}
+                  className="text-center p-6 border-border/50 hover:border-primary/50 transition-all animate-slide-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Users className="h-8 w-8 text-primary" />
+                  </div>
+                  <h4 className="font-heading text-lg font-semibold text-foreground mb-1">
+                    {leader.name}
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-2">{leader.role}</p>
+                  <a 
+                    href={`tel:${leader.phone}`}
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    <Phone className="h-3 w-3" />
+                    {leader.phone}
+                  </a>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </section>

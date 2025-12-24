@@ -36,6 +36,8 @@ import SuperAdminSettings from "./pages/SuperAdminSettings";
 import QiratSettings from "./pages/QiratSettings";
 import DawaSettings from "./pages/DawaSettings";
 import CharitySettings from "./pages/CharitySettings";
+import ExternalAffairsLeaders from "./pages/ExternalAffairsLeaders";
+import ExternalAffairsDashboard from "./pages/ExternalAffairsDashboard";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
@@ -54,6 +56,7 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/vision-mission" element={<VisionMission />} />
             <Route path="/structure" element={<Structure />} />
+            <Route path="/external-affairs-leaders" element={<ExternalAffairsLeaders />} />
             <Route path="/programs" element={<Programs />} />
             <Route path="/children-registration" element={<ChildrenRegistration />} />
             <Route path="/monthly-charity" element={<MonthlyCharityRegistration />} />
@@ -102,6 +105,11 @@ const App = () => (
             <Route path="/admin/qirat/settings" element={<QiratSettings />} />
             <Route path="/admin/dawa/settings" element={<DawaSettings />} />
             <Route path="/admin/charity/settings" element={<CharitySettings />} />
+            <Route path="/admin/external-affairs" element={
+              <ProtectedRoute allowedRoles={['superadmin']}>
+                <ExternalAffairsDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

@@ -19,6 +19,7 @@ const serviceLinks = [
   { name: "Charity Distribution", path: "/charity-distribution" },
   { name: "Vision & Mission", path: "/vision-mission" },
   { name: "Structure", path: "/structure" },
+  { name: "EA Leaders (2000-2018)", path: "/external-affairs-leaders" },
 ];
 
 export function Navbar() {

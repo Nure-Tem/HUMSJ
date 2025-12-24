@@ -389,6 +389,13 @@ const AdminDashboard = () => {
               Charity
             </Button>
             <Button 
+              onClick={() => navigate("/admin/external-affairs")}
+              className="bg-orange-600 hover:bg-orange-700"
+            >
+              <Users className="h-4 w-4 mr-2" />
+              EA Leaders
+            </Button>
+            <Button 
               onClick={() => navigate("/admin/create-post")}
               className="bg-green-600 hover:bg-green-700"
             >
