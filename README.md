@@ -267,19 +267,30 @@ After login, the user's role is fetched from Firestore (`users/{uid}.role`). The
 **Homepage — Hero Section**
 
 ![HUMSJ Homepage Hero](./docs/screenshots/homepage-hero.png)
+<img width="962" height="448" alt="screenshoot-1" src="https://github.com/user-attachments/assets/4996166c-6ccb-4d51-aed0-7db53f635d56" />
+
 
 **About — Leadership Team**
 
 ![HUMSJ Leadership Team](./docs/screenshots/about-leadership.png)
+<img width="961" height="449" alt="screenshoot-2" src="https://github.com/user-attachments/assets/fba6dbe1-b3c7-4d03-b3d6-537ea1378ab8" />
+
 
 **Contact — Services Dropdown & Contact Form**
 
 ![HUMSJ Contact & Services](./docs/screenshots/contact-services.png)
+<img width="963" height="441" alt="screenshoot-4" src="https://github.com/user-attachments/assets/a663680e-4292-4e7d-b164-6a24b527ad4f" />
+
+
+
 
 **News & Updates — Category Filter**
 
 ![HUMSJ News Page](./docs/screenshots/news-feed.png)
 <img width="2048" height="1447" alt="hsss image" src="https://github.com/user-attachments/assets/d0201880-c1de-4dc1-b7fa-aafceec4d8d9" />
+
+<img width="814" height="435" alt="screenshoot-3" src="https://github.com/user-attachments/assets/e84ef26d-0a17-4c94-9ac5-436994b4c85e" />
+
 
 
 ---
