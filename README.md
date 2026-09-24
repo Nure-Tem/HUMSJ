@@ -286,9 +286,6 @@ After login, the user's role is fetched from Firestore (`users/{uid}.role`). The
 
 **News & Updates — Category Filter**
 
-
-<img width="2048" height="1447" alt="hsss image" src="https://github.com/user-attachments/assets/d0201880-c1de-4dc1-b7fa-aafceec4d8d9" />
-
 <img width="814" height="435" alt="screenshoot-3" src="https://github.com/user-attachments/assets/e84ef26d-0a17-4c94-9ac5-436994b4c85e" />
 
 
